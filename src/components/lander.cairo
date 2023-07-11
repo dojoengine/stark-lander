@@ -3,9 +3,9 @@ use traits::Into;
 
 // we keep position and velocity in same component so we can compute the position...
 // TODO: might be better way to do this
-#[derive(Component, Copy, Drop)]
+#[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Lander {
-    last_update: u128,
+    last_update: u64,
     position_x: u128,
     position_y: u128,
     velocity_x: u128,
