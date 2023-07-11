@@ -6,7 +6,7 @@ use cubit::math::trig::{cos, sin, PI_u128};
 use traits::{TryInto, Into};
 
 // Constants
-const GRAVITY: u128 = 1; // Gravity force
+const GRAVITY: u128 = 10; // Gravity force
 const THRUST_FORCE: u128 = 1; // Thrust force applied on each update
 const LANDER_WIDTH: u32 = 100; // Width of the lander
 const LANDER_HEIGHT: u32 = 100; // Height of the lander
@@ -34,8 +34,8 @@ fn deg_to_rad(theta_deg: Fixed) -> Fixed {
 }
 
 trait ILander {
-    fn new(position: Vec2) -> Lander;
-    fn update(ref self: Lander, trust: Fixed, angle: Fixed, delta_time: Fixed) -> Lander;
+    fn new(position: Vec2, velocity: Vec2) -> Lander;
+    fn update(ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252) -> Lander;
 
     fn check_landed(ref self: Lander);
 }
@@ -59,11 +59,9 @@ impl ImplLander of ILander {
     // assert(self.position.x.mag >= 0, '')
     }
 
-    fn new(position: Vec2) -> Lander {
+    fn new(position: Vec2, velocity: Vec2) -> Lander {
         Lander {
-            position: position, velocity: Vec2 {
-                x: FixedTrait::new(1, false), y: FixedTrait::new(1, false)
-            },
+            position: position, velocity,
             angle: FixedTrait::new(0, false),
             fuel: FixedTrait::new(INITIAL_FUEL, false),
             thrust_angle: FixedTrait::new(0, false),
@@ -73,69 +71,42 @@ impl ImplLander of ILander {
     fn update(
         ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
     ) -> Lander {
+
         let thrust = FixedTrait::from_unscaled_felt(thrust_felt);
+
         let angle = deg_to_rad(FixedTrait::from_unscaled_felt(angle_deg_felt));
+
         let delta_time = FixedTrait::from_unscaled_felt(delta_time_felt);
 
-        // downward force of gravity
-        // let gravity_force = FixedTrait::new(GRAVITY.into(), true);
-        let gravity_force = Vec2Trait::new(0, FixedTrait::new(GRAVITY, true));
+        // Update gravity -----------------------------
 
-        // let thrust_fixed = Fixed{mag: trust.mag.into(), sign: false};
+        let gravity_force = Vec2Trait::new(FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true));
 
-        // let thrust_x = thrust * cos(angle);
-        // let thrust_y = thrust * sin(angle);
+        // Update force -----------------------------
+
         let thrust_force = Vec2Trait::new(thrust * cos(angle), thrust * sin(angle));
-
-        // let thrust_force_x = thrust_x * FixedTrait::new(THRUST_FORCE, false);
-        // let thrust_force_y = thrust_y * FixedTrait::new(THRUST_FORCE, false);
-
-        // let total_force_x = thrust_force_x; // no other forces acting horizontally for now
-        // let total_force_y = gravity_force + thrust_force_y;
         let total_force = gravity_force + thrust_force;
 
-        // Update velocity
-        // let delta_velocity_x = total_force.x * delta_time;
-        // let delta_velocity_y = total_force.y * delta_time;
+        // Update velocity -----------------------------
+
         let delta_velocity = Vec2Trait::new(total_force.x * delta_time, total_force.y * delta_time);
+        self.velocity = self.velocity + delta_velocity;
 
-        // let old_velocity = self.velocity;
+        // Update position -----------------------------
 
-        // self.velocity.x = old_velocity.x + delta_velocity_x;
-        // self.velocity.y = old_velocity.y + delta_velocity_y;
-        self.velocity = self.velocity + delta_velocity
+        let delta_position = Vec2Trait::new(self.velocity.x * delta_time, self.velocity.y * delta_time);
+        self.position = self.position + delta_position;
 
-        // Update position
-
-        // self.position.x = self.position.x + self.velocity.x * delta_time;
-        // self.position.y = self.position.y + self.velocity.y * delta_time;
-
-        let delta_position = Vec2Trait::new(velocity.x * delta_time, velocity.y * delta_time);
-
-        // let old_position = self.position;
-
-        // self.position.x = old_position.x + delta_position_x;
-        // self.position.y = old_position.y + delta_position_y;
-        self.position = self.position + delta_position
+        // Update fuel -----------------------------
 
         let fuel_consumption = FixedTrait::new(FUEL_CONSUMPTION_RATE, false);
-        // Update fuel
+
         let fuel_consumed = fuel_consumption * delta_time;
         self.fuel -= fuel_consumed;
 
         self
     }
 }
-
-// #[test]
-// #[available_gas(500000)]
-// fn test_new_lander() {
-
-//     let position = Position { x: IntegerTrait::<i32>::new(0, false), y: IntegerTrait::<i32>::new(0, false) };
-
-//     let lander = ImplLander::new(position);
-
-// }
 
 #[test]
 #[available_gas(500000000)]
@@ -144,23 +115,30 @@ fn test_update() {
         x: FixedTrait::new_unscaled(10, false), y: FixedTrait::new_unscaled(10000, false)
     };
 
-    let mut lander = ImplLander::new(position);
+    let velocity = Vec2 {
+        x: FixedTrait::new(0, false), y: FixedTrait::new(0, false)
+    };
+
+    let mut lander = ImplLander::new(position, velocity);
 
     // negative thrust - 10 second burn
     lander
         .update(
-            FixedTrait::new_unscaled(10, true),
-            FixedTrait::new_unscaled(5, false),
-            FixedTrait::new_unscaled(1, false)
+            0,
+            90,
+            1
         );
 
-    FixedTrait::floor(lander.position.x).mag.print();
-    FixedTrait::floor(lander.position.y).mag.print();
-    lander.position.x.mag.print();
-    lander.position.y.mag.print();
+    (lander.position.x.mag/ ONE_u128).print();
+    lander.position.x.sign.print();
 
-    lander.velocity.x.mag.print();
-    lander.velocity.y.mag.print();
+    (lander.position.y.mag/ ONE_u128).print();
+    lander.position.y.sign.print();
 
-    lander.fuel.mag.print();
+    (lander.velocity.x.mag/ ONE_u128).print();
+    lander.velocity.x.sign.print();
+
+    (lander.velocity.y.mag/ ONE_u128).print();
+    lander.velocity.y.sign.print();
+
 }
