@@ -1,4 +1,3 @@
-// use orion::numbers::signed_integer::{integer_trait::IntegerTrait, i32::i32};
 use debug::PrintTrait;
 use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128};
 use cubit::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
