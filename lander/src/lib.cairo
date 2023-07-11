@@ -111,8 +111,8 @@ impl ImplLander of ILander {
         );
 
         // Update force -----------------------------
-
-        let total_force = gravity_force;
+        let thrust_force = Vec2Trait::new(cos(self.angle), sin(self.angle));
+        let total_force = gravity_force + thrust_force;
 
         // Update velocity -----------------------------
 
@@ -154,7 +154,7 @@ fn test_update() {
     let mut lander = ImplLander::new(position, velocity);
 
     // negative thrust - 10 second burn
-    lander.burn(0, 90, 1);
+    lander.burn(10, 90, 10);
 
     // lander.print();
 
@@ -170,7 +170,7 @@ fn test_update() {
     (lander.velocity.y.mag / ONE_u128).print();
     lander.velocity.y.sign.print();
 
-    lander.position(100);
+    lander.position(10);
 
     (lander.position.x.mag / ONE_u128).print();
     lander.position.x.sign.print();
