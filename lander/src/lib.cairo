@@ -23,8 +23,7 @@ struct Lander {
     position: Vec2,
     velocity: Vec2,
     angle: Fixed,
-    fuel: Fixed,
-    thrust_angle: Fixed,
+    fuel: Fixed
 }
 
 fn deg_to_rad(theta_deg: Fixed) -> Fixed {
@@ -35,43 +34,33 @@ fn deg_to_rad(theta_deg: Fixed) -> Fixed {
 
 trait ILander {
     fn new(position: Vec2, velocity: Vec2) -> Lander;
-    fn update(ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252) -> Lander;
 
-    fn check_landed(ref self: Lander);
+    // adjusts the lander's position, velocity, and fuel based on the thrust and angle
+    fn burn(
+        ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
+    ) -> Lander;
+
+    // returns the lander's position at the given time
+    fn position(ref self: Lander, delta_time_felt: felt252) -> Lander;
+
+    // wins if the lander is on the landing pad with a low enough velocity and angle
+    fn check_landed(ref self: Lander) -> bool;
+
+    fn print(ref self: Lander);
 }
 
 impl ImplLander of ILander {
-    fn check_landed(ref self: Lander) {
-        // Check if below y
-        assert(self.position.y.mag <= 0, '');
-
-        // check if within x
-        assert(self.position.x.mag >= 0, '');
-        assert(self.position.x.mag >= 100, '');
-
-        // check if within velocity
-        assert(self.velocity.x.mag <= 5, '');
-        assert(self.velocity.y.mag <= 5, '');
-
-        // check fuel
-        assert(self.fuel.mag >= 0, '');
-    // check angle
-    // assert(self.position.x.mag >= 0, '')
-    }
-
     fn new(position: Vec2, velocity: Vec2) -> Lander {
         Lander {
-            position: position, velocity,
+            position: position,
+            velocity,
             angle: FixedTrait::new(0, false),
-            fuel: FixedTrait::new(INITIAL_FUEL, false),
-            thrust_angle: FixedTrait::new(0, false),
+            fuel: FixedTrait::new(INITIAL_FUEL, false)
         }
     }
-
-    fn update(
+    fn burn(
         ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
     ) -> Lander {
-
         let thrust = FixedTrait::from_unscaled_felt(thrust_felt);
 
         let angle = deg_to_rad(FixedTrait::from_unscaled_felt(angle_deg_felt));
@@ -80,7 +69,9 @@ impl ImplLander of ILander {
 
         // Update gravity -----------------------------
 
-        let gravity_force = Vec2Trait::new(FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true));
+        let gravity_force = Vec2Trait::new(
+            FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true)
+        );
 
         // Update force -----------------------------
 
@@ -94,7 +85,9 @@ impl ImplLander of ILander {
 
         // Update position -----------------------------
 
-        let delta_position = Vec2Trait::new(self.velocity.x * delta_time, self.velocity.y * delta_time);
+        let delta_position = Vec2Trait::new(
+            self.velocity.x * delta_time, self.velocity.y * delta_time
+        );
         self.position = self.position + delta_position;
 
         // Update fuel -----------------------------
@@ -103,8 +96,49 @@ impl ImplLander of ILander {
 
         let fuel_consumed = fuel_consumption * delta_time;
         self.fuel -= fuel_consumed;
+        self.angle = FixedTrait::from_unscaled_felt(angle_deg_felt);
 
         self
+    }
+    fn position(ref self: Lander, delta_time_felt: felt252) -> Lander {
+
+        let delta_time = FixedTrait::from_unscaled_felt(delta_time_felt);
+
+        // Update gravity -----------------------------
+
+        let gravity_force = Vec2Trait::new(
+            FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true)
+        );
+
+        // Update force -----------------------------
+
+        let total_force = gravity_force;
+
+        // Update velocity -----------------------------
+
+        let delta_velocity = Vec2Trait::new(total_force.x * delta_time, total_force.y * delta_time);
+        self.velocity = self.velocity + delta_velocity;
+
+        // Update position -----------------------------
+
+        let delta_position = Vec2Trait::new(
+            self.velocity.x * delta_time, self.velocity.y * delta_time
+        );
+        self.position = self.position + delta_position;
+
+        self
+    }
+    fn check_landed(ref self: Lander) -> bool {
+        // check if the lander is on the landing pad with a low enough velocity and angle
+        true
+    }
+
+    fn print(ref self: Lander) {
+        self.position.print();
+        self.velocity.print();
+
+        self.angle.print();
+        self.fuel.print();
     }
 }
 
@@ -115,30 +149,38 @@ fn test_update() {
         x: FixedTrait::new_unscaled(10, false), y: FixedTrait::new_unscaled(10000, false)
     };
 
-    let velocity = Vec2 {
-        x: FixedTrait::new(0, false), y: FixedTrait::new(0, false)
-    };
+    let velocity = Vec2 { x: FixedTrait::new(0, false), y: FixedTrait::new(0, false) };
 
     let mut lander = ImplLander::new(position, velocity);
 
     // negative thrust - 10 second burn
-    lander
-        .update(
-            0,
-            90,
-            1
-        );
+    lander.burn(0, 90, 1);
 
-    (lander.position.x.mag/ ONE_u128).print();
+    // lander.print();
+
+    (lander.position.x.mag / ONE_u128).print();
     lander.position.x.sign.print();
 
-    (lander.position.y.mag/ ONE_u128).print();
+    (lander.position.y.mag / ONE_u128).print();
     lander.position.y.sign.print();
 
-    (lander.velocity.x.mag/ ONE_u128).print();
+    (lander.velocity.x.mag / ONE_u128).print();
     lander.velocity.x.sign.print();
 
-    (lander.velocity.y.mag/ ONE_u128).print();
+    (lander.velocity.y.mag / ONE_u128).print();
     lander.velocity.y.sign.print();
 
+    lander.position(100);
+
+    (lander.position.x.mag / ONE_u128).print();
+    lander.position.x.sign.print();
+
+    (lander.position.y.mag / ONE_u128).print();
+    lander.position.y.sign.print();
+
+    (lander.velocity.x.mag / ONE_u128).print();
+    lander.velocity.x.sign.print();
+
+    (lander.velocity.y.mag / ONE_u128).print();
+    lander.velocity.y.sign.print();
 }

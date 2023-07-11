@@ -18,3 +18,9 @@ struct Velocity {
 struct Lander {
     id: u128
 }
+
+impl ImplLander of Lander {
+    fn new(id: u128) -> Self {
+        Self { id }
+    }
+}
