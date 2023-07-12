@@ -69,7 +69,7 @@ impl ImplLander of ILander {
         // Update gravity -----------------------------
 
         let gravity_force = Vec2Trait::new(
-            FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true)
+            FixedTrait::new(0, false), FixedTrait::new_unscaled(GRAVITY, true)
         );
 
         // Update force -----------------------------
@@ -78,6 +78,7 @@ impl ImplLander of ILander {
         let total_force = gravity_force + thrust_force;
 
         // Update velocity -----------------------------
+
         let old_velocity = self.velocity;
         let delta_velocity = Vec2Trait::new(total_force.x * delta_time, total_force.y * delta_time);
         self.velocity = old_velocity + delta_velocity;
@@ -108,7 +109,7 @@ impl ImplLander of ILander {
         // Update gravity -----------------------------
 
         let gravity_force = Vec2Trait::new(
-            FixedTrait::new(0, false), FixedTrait::new(GRAVITY, true)
+            FixedTrait::new(0, false), FixedTrait::new_unscaled(GRAVITY, true)
         );
 
         // Update force -----------------------------
@@ -150,41 +151,44 @@ impl ImplLander of ILander {
 #[available_gas(500000000)]
 fn test_update() {
     let position = Vec2 {
-        x: FixedTrait::new_unscaled(10, false), y: FixedTrait::new_unscaled(10000, false)
+        x: FixedTrait::new_unscaled(1000, false), y: FixedTrait::new_unscaled(12000, false)
     };
 
-    let velocity = Vec2 { x: FixedTrait::new(0, false), y: FixedTrait::new(0, false) };
+    let velocity = Vec2 {
+        x: FixedTrait::new_unscaled(100, false), y: FixedTrait::new_unscaled(100, true)
+    };
 
     let mut lander = ImplLander::new(position, velocity);
 
-    // negative thrust - 10 second burn
-    lander.burn(10, 90, 10);
+    lander.burn(10, -45, 10);
+    // positive thrust, 10 second burn
+    // lander.burn(10, 90, 10);
 
     // lander.print();
 
-    (lander.position.x.mag / ONE_u128).print();
+    (lander.position.x.mag).print();
     lander.position.x.sign.print();
 
-    (lander.position.y.mag / ONE_u128).print();
+    (lander.position.y.mag).print();
     lander.position.y.sign.print();
 
-    (lander.velocity.x.mag / ONE_u128).print();
+    (lander.velocity.x.mag).print();
     lander.velocity.x.sign.print();
 
-    (lander.velocity.y.mag / ONE_u128).print();
+    (lander.velocity.y.mag).print();
     lander.velocity.y.sign.print();
 
     lander.position(10);
 
-    (lander.position.x.mag / ONE_u128).print();
+    (lander.position.x.mag).print();
     lander.position.x.sign.print();
 
-    (lander.position.y.mag / ONE_u128).print();
+    (lander.position.y.mag).print();
     lander.position.y.sign.print();
 
-    (lander.velocity.x.mag / ONE_u128).print();
+    (lander.velocity.x.mag).print();
     lander.velocity.x.sign.print();
 
-    (lander.velocity.y.mag / ONE_u128).print();
+    (lander.velocity.y.mag).print();
     lander.velocity.y.sign.print();
 }
