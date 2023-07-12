@@ -139,11 +139,21 @@ impl ImplLander of ILander {
     }
 
     fn print(ref self: Lander) {
-        self.position.print();
-        self.velocity.print();
+        self.position.x.mag.print();
+        self.position.x.sign.print();
+        self.position.y.mag.print();
+        self.position.y.sign.print();
 
-        self.angle.print();
-        self.fuel.print();
+        self.velocity.x.mag.print();
+        self.velocity.x.sign.print();
+        self.velocity.y.mag.print();
+        self.velocity.y.sign.print();
+
+        self.angle.mag.print();
+        self.angle.sign.print();
+
+        self.fuel.mag.print();
+        self.fuel.sign.print();
     }
 }
 
@@ -160,11 +170,12 @@ fn test_update() {
 
     let mut lander = ImplLander::new(position, velocity);
 
-    lander.burn(10, -45, 10);
+    lander.burn(5, -45, 5);
+
     // positive thrust, 10 second burn
     // lander.burn(10, 90, 10);
 
-    // lander.print();
+    lander.print();
 
     (lander.position.x.mag).print();
     lander.position.x.sign.print();
