@@ -175,7 +175,7 @@ fn test_update() {
     // positive thrust, 10 second burn
     // lander.burn(10, 90, 10);
 
-    lander.print();
+    // lander.print();
 
     (lander.position.x.mag).print();
     lander.position.x.sign.print();
