@@ -78,14 +78,17 @@ impl ImplLander of ILander {
         let total_force = gravity_force + thrust_force;
 
         // Update velocity -----------------------------
-
+        let old_velocity = self.velocity;
         let delta_velocity = Vec2Trait::new(total_force.x * delta_time, total_force.y * delta_time);
-        self.velocity = self.velocity + delta_velocity;
+        self.velocity = old_velocity + delta_velocity;
 
         // Update position -----------------------------
-
+        let two = FixedTrait::new(2 * ONE_u128, false);
+        let avg_velocity = Vec2Trait::new(
+            (old_velocity.x + self.velocity.x) / two, (old_velocity.y + self.velocity.y) / two
+        );
         let delta_position = Vec2Trait::new(
-            self.velocity.x * delta_time, self.velocity.y * delta_time
+            avg_velocity.x * delta_time, avg_velocity.y * delta_time
         );
         self.position = self.position + delta_position;
 
@@ -100,7 +103,6 @@ impl ImplLander of ILander {
         self
     }
     fn position(ref self: Lander, delta_time_felt: felt252) -> Lander {
-
         let delta_time = FixedTrait::from_unscaled_felt(delta_time_felt);
 
         // Update gravity -----------------------------
@@ -110,18 +112,21 @@ impl ImplLander of ILander {
         );
 
         // Update force -----------------------------
-        let thrust_force = Vec2Trait::new(cos(self.angle), sin(self.angle));
-        let total_force = gravity_force + thrust_force;
+        // let thrust_force = Vec2Trait::new(cos(self.angle), sin(self.angle));
+        let total_force = gravity_force;
 
         // Update velocity -----------------------------
-
+        let old_velocity = self.velocity;
         let delta_velocity = Vec2Trait::new(total_force.x * delta_time, total_force.y * delta_time);
-        self.velocity = self.velocity + delta_velocity;
+        self.velocity = old_velocity + delta_velocity;
 
         // Update position -----------------------------
-
+        let two = FixedTrait::new(2 * ONE_u128, false);
+        let avg_velocity = Vec2Trait::new(
+            (old_velocity.x + self.velocity.x) / two, (old_velocity.y + self.velocity.y) / two
+        );
         let delta_position = Vec2Trait::new(
-            self.velocity.x * delta_time, self.velocity.y * delta_time
+            avg_velocity.x * delta_time, avg_velocity.y * delta_time
         );
         self.position = self.position + delta_position;
 
