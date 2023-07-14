@@ -31,8 +31,8 @@ fn deg_to_rad(theta_deg: Fixed) -> Fixed {
     theta_deg * pi / one_eighty
 }
 
-trait ILander {
-    fn new(position: Vec2, velocity: Vec2) -> Lander;
+trait ILanderMath {
+    fn new(position: Vec2, velocity: Vec2, angle: u128, fuel: u128) -> Lander;
 
     // adjusts the lander's position, velocity, and fuel based on the thrust and angle
     fn burn(
@@ -48,13 +48,13 @@ trait ILander {
     fn print(ref self: Lander);
 }
 
-impl ImplLander of ILander {
-    fn new(position: Vec2, velocity: Vec2) -> Lander {
+impl ImplLanderMath of ILanderMath {
+    fn new(position: Vec2, velocity: Vec2, angle: u128, fuel: u128) -> Lander {
         Lander {
             position: position,
             velocity,
-            angle: FixedTrait::new(0, false),
-            fuel: FixedTrait::new(INITIAL_FUEL, false)
+            angle: FixedTrait::new(angle.into(), false),
+            fuel: FixedTrait::new(fuel.into(), false)
         }
     }
     fn burn(
@@ -131,7 +131,6 @@ impl ImplLander of ILander {
         // check if the lander is on the landing pad with a low enough velocity and angle
         true
     }
-
     fn print(ref self: Lander) {
         self.position.print();
         self.velocity.print();
@@ -150,26 +149,12 @@ fn test_update() {
 
     let velocity = Vec2 { x: FixedTrait::new(0, false), y: FixedTrait::new(0, false) };
 
-    let mut lander = ImplLander::new(position, velocity);
+    let mut lander = ImplLanderMath::new(position, velocity, 45, 100);
 
     // negative thrust - 10 second burn
     lander.burn(10, 90, 10);
 
     // lander.print();
-
-    (lander.position.x.mag / ONE_u128).print();
-    lander.position.x.sign.print();
-
-    (lander.position.y.mag / ONE_u128).print();
-    lander.position.y.sign.print();
-
-    (lander.velocity.x.mag / ONE_u128).print();
-    lander.velocity.x.sign.print();
-
-    (lander.velocity.y.mag / ONE_u128).print();
-    lander.velocity.y.sign.print();
-
-    lander.position(10);
 
     (lander.position.x.mag / ONE_u128).print();
     lander.position.x.sign.print();

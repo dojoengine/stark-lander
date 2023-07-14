@@ -65,12 +65,12 @@ mod Burn {
         // TODO: check fuel
 
         // get current state
-        let lander: Lander = get !(ctx.world, player_sk, Lander);
+        let mut lander: Lander = get !(ctx.world, player_sk, Lander);
 
         let elapsed = info.block_timestamp - lander.last_update;
 
         // compute position based on elapsed time and current state
-        // let current_lander_position = lander.position(elapsed);
+        let mut current_lander_position = lander.position(elapsed);
 
         // compute new velocity based on elapsed time and current state
         // compute new fuel

@@ -9,6 +9,7 @@ sierra-replace-ids = true
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo" }
 cubit = { git = "https://github.com/influenceth/cubit" }
+lander = { path = "./lander" }
 
 [[target.dojo]]
 
