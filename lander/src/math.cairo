@@ -74,7 +74,7 @@ impl ImplLanderMath of ILanderMath {
 
         // Update gravity -----------------------------
 
-        let gravity_force = gravity(GRAVITY)
+        let gravity_force = gravity(GRAVITY);
 
         // Update force -----------------------------
 
@@ -113,7 +113,7 @@ impl ImplLanderMath of ILanderMath {
 
         // Update gravity -----------------------------
 
-        let gravity_force = gravity(GRAVITY)
+        let gravity_force = gravity(GRAVITY);
 
         // Update force -----------------------------
         let total_force = gravity_force;
