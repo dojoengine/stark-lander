@@ -31,6 +31,10 @@ fn deg_to_rad(theta_deg: Fixed) -> Fixed {
     theta_deg * pi / one_eighty
 }
 
+fn gravity(gravity: u128) -> Vec2 {
+    Vec2Trait::new(FixedTrait::new(0, false), FixedTrait::new_unscaled(gravity, true))
+}
+
 trait ILanderMath {
     fn new(position: Vec2, velocity: Vec2, angle: Fixed, fuel: Fixed) -> LanderMath;
 
@@ -54,12 +58,7 @@ trait ILanderMath {
 
 impl ImplLanderMath of ILanderMath {
     fn new(position: Vec2, velocity: Vec2, angle: Fixed, fuel: Fixed) -> LanderMath {
-        LanderMath {
-            position,
-            velocity,
-            angle: angle,
-            fuel: fuel
-        }
+        LanderMath { position, velocity, angle, fuel }
     }
     fn burn(
         ref self: LanderMath,
@@ -75,9 +74,7 @@ impl ImplLanderMath of ILanderMath {
 
         // Update gravity -----------------------------
 
-        let gravity_force = Vec2Trait::new(
-            FixedTrait::new(0, false), FixedTrait::new_unscaled(GRAVITY, true)
-        );
+        let gravity_force = gravity(GRAVITY)
 
         // Update force -----------------------------
 
@@ -91,6 +88,7 @@ impl ImplLanderMath of ILanderMath {
         self.velocity = old_velocity + delta_velocity;
 
         // Update position -----------------------------
+
         let two = FixedTrait::new(2 * ONE_u128, false);
         let avg_velocity = Vec2Trait::new(
             (old_velocity.x + self.velocity.x) / two, (old_velocity.y + self.velocity.y) / two
@@ -115,12 +113,9 @@ impl ImplLanderMath of ILanderMath {
 
         // Update gravity -----------------------------
 
-        let gravity_force = Vec2Trait::new(
-            FixedTrait::new(0, false), FixedTrait::new_unscaled(GRAVITY, true)
-        );
+        let gravity_force = gravity(GRAVITY)
 
         // Update force -----------------------------
-        // let thrust_force = Vec2Trait::new(cos(self.angle), sin(self.angle));
         let total_force = gravity_force;
 
         // Update velocity -----------------------------
@@ -142,6 +137,11 @@ impl ImplLanderMath of ILanderMath {
     }
     fn check_landed(ref self: LanderMath) -> bool {
         // check if the lander is on the landing pad with a low enough velocity and angle
+
+        // check y velocity is within range
+        // check x velocity is within range
+        // check x position is within range
+        // check y position is negative
         true
     }
     fn print(ref self: LanderMath) {
@@ -189,7 +189,9 @@ fn test_update() {
         x: FixedTrait::new_unscaled(100, false), y: FixedTrait::new_unscaled(100, true)
     };
 
-    let mut lander = ImplLanderMath::new(position, velocity, FixedTrait::new(45, false), FixedTrait::new(100, false));
+    let mut lander = ImplLanderMath::new(
+        position, velocity, FixedTrait::new(45, false), FixedTrait::new(100, false)
+    );
 
     lander.burn(5, -45, 5);
 

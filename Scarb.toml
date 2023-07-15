@@ -1,14 +1,14 @@
 [package]
 name = "stark_lander"
 version = "0.1.0"
-cairo-version = "2.0.0"
+cairo-version = "2.0.1"
 
 [cairo]
 sierra-replace-ids = true
 
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo" }
-cubit = { git = "https://github.com/influenceth/cubit" }
+# cubit = { git = "https://github.com/influenceth/cubit" }
 lander_math = { path = "./lander" }
 
 [[target.dojo]]

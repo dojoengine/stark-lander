@@ -23,11 +23,18 @@ struct Lander {
 }
 
 trait LanderTrait {
+    // computed position
     fn position(ref self: Lander, elapsed: u64) -> Lander;
+
+    // burn adjustment
     fn burn(
         ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
     ) -> Lander;
+
+    // check within range
     fn has_landed(self: @Lander) -> bool;
+
+    // convert to math struct
     fn to_math(self: @Lander) -> LanderMath;
 }
 

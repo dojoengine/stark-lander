@@ -12,7 +12,7 @@ mod Start {
     use stark_lander::components::lander::Lander;
     use stark_lander::components::fuel::Fuel;
 
-    fn execute(ctx: Context) {
+    fn execute(ctx: Context) -> (u32, felt252) {
         let info = starknet::get_block_info().unbox();
 
         let player_id: felt252 = ctx.origin.into();
@@ -41,6 +41,6 @@ mod Start {
                 fuel_sign: false,
             })
         );
-        return ();
+        return (game_id, player_id);
     }
 }
