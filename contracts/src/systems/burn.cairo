@@ -14,6 +14,7 @@ mod burn {
         game_id: u32,
         thrust_felt: u128,
         angle_deg_felt: u128,
+        angle_deg_sign: bool,
         delta_time_felt: u128
     ) {
         let info = starknet::get_block_info().unbox();
@@ -35,7 +36,7 @@ mod burn {
         lander.position(elapsed);
 
         // burn!!
-        lander.burn(thrust_felt, angle_deg_felt, delta_time_felt);
+        lander.burn(thrust_felt, angle_deg_felt, angle_deg_sign, delta_time_felt);
 
         // save new state of Lander
         set !(ctx.world, player_sk, (lander));

@@ -1,3 +1,4 @@
+use core::debug::PrintTrait;
 use lander_math::math::{ImplLanderMath, ILanderMath, LanderMath};
 use box::BoxTrait;
 use traits::Into;
@@ -28,7 +29,11 @@ trait LanderTrait {
 
     // burn adjustment
     fn burn(
-        ref self: Lander, thrust_felt: u128, angle_deg_felt: u128, delta_time_felt: u128
+        ref self: Lander,
+        thrust_felt: u128,
+        angle_deg_felt: u128,
+        angle_deg_sign: bool,
+        delta_time_felt: u128
     ) -> Lander;
 
     // check within range
@@ -40,13 +45,15 @@ trait LanderTrait {
 
 impl ImplLander of LanderTrait {
     fn burn(
-        ref self: Lander, thrust_felt: u128, angle_deg_felt: u128, delta_time_felt: u128
+        ref self: Lander, thrust_felt: u128, angle_deg_felt: u128, angle_deg_sign: bool, delta_time_felt: u128
     ) -> Lander {
         let info = starknet::get_block_info().unbox();
 
         let mut landerMath = self.to_math();
 
-        landerMath.burn(thrust_felt, angle_deg_felt, delta_time_felt);
+        landerMath.burn(thrust_felt, angle_deg_felt, angle_deg_sign, delta_time_felt);
+
+        landerMath.print_unscaled();
 
         Lander {
             last_update: info.block_timestamp,

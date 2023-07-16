@@ -27,15 +27,15 @@ mod start {
             player_sk,
             (Lander {
                 last_update: info.block_timestamp,
-                position_x: 100,
+                position_x: 1000,
                 position_x_sign: false,
-                position_y: 10000,
+                position_y: 12000,
                 position_y_sign: false,
-                velocity_x: 1,
+                velocity_x: 100,
                 velocity_x_sign: false,
-                velocity_y: 1,
+                velocity_y: 100,
                 velocity_y_sign: false,
-                angle: 90,
+                angle: 0,
                 angle_sign: false,
                 fuel: 100,
                 fuel_sign: false,
@@ -92,23 +92,34 @@ mod tests {
         assert(res.len() > 0, 'did not spawn');
 
         let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
-            .expect('spawn deserialization failed');
+            .expect('create deserialization failed');
 
         let lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
         
         assert(*lander[0] == STARTING_BLOCKTIME.into(), 'x is wrong');
-        assert(*lander[1] == 100, 'x is wrong');
+        assert(*lander[1] == 1000, 'x is wrong');
         assert(*lander[2] == 0, 'x sign is wrong');
-        assert(*lander[3] == 10000, 'y is wrong');
+        assert(*lander[3] == 12000, 'y is wrong');
+
+        testing::set_block_timestamp(STARTING_BLOCKTIME + 1000);
 
 
         let mut burn_call_data: Array = ArrayTrait::<felt252>::new();
         burn_call_data.append(game_id.into());
+        burn_call_data.append(5.into());
+        burn_call_data.append(45.into());
         burn_call_data.append(1.into());
-        burn_call_data.append(1.into());
-        burn_call_data.append(1.into());
+        burn_call_data.append(5.into());
 
         let mut res = world.execute('burn'.into(), burn_call_data.span());
+
+
+        let new_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
+        
+        assert(*new_lander[0] != STARTING_BLOCKTIME.into(), 'x is wrong');
+        assert(*new_lander[1] != 100, 'x is wrong');
+        assert(*new_lander[2] != 0, 'x sign is wrong');
+        assert(*new_lander[3] == 10000, 'y is wrong');
 
     }
 }

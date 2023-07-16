@@ -43,6 +43,7 @@ trait ILanderMath {
         ref self: LanderMath,
         thrust_felt: u128,
         angle_deg_felt: u128,
+        angle_deg_sign: bool,
         delta_time_felt: u128
     ) -> LanderMath;
 
@@ -64,12 +65,13 @@ impl ImplLanderMath of ILanderMath {
         ref self: LanderMath,
         thrust_felt: u128,
         angle_deg_felt: u128,
+        angle_deg_sign: bool,
         delta_time_felt: u128
     ) -> LanderMath {
         let thrust = FixedTrait::new_unscaled(thrust_felt, false);
 
         // let angle = deg_to_rad(FixedTrait::from_unscaled_felt(angle_deg_felt));
-        let angle = FixedTrait::new_unscaled(angle_deg_felt, false);
+        let angle = FixedTrait::new_unscaled(angle_deg_felt, angle_deg_sign);
 
         let delta_time = FixedTrait::new_unscaled(delta_time_felt, false);
 
@@ -196,7 +198,7 @@ fn test_update() {
     );
 
     // lander.burn(5, -45, 5);
-    lander.burn(5, 45, 5);
+    lander.burn(5, 15, true, 5);
     lander.print_unscaled();
 
     // (lander.position.x.mag).print();
