@@ -47,8 +47,6 @@ impl ImplLander of LanderTrait {
 
         landerMath.print_unscaled();
 
-        // landerMath.position.x.mag.print();
-
         Lander {
             last_update: info.block_timestamp,
             position_x: landerMath.position.x.mag,
@@ -65,14 +63,15 @@ impl ImplLander of LanderTrait {
             fuel_sign: landerMath.fuel.sign,
         }
     }
-    #[computed(key = “is_zero”)]
+    // #[computed(key = “is_zero”)]
     fn position(ref self: Lander, elapsed: u64) -> Lander {
         let mut landerMath = self.to_math();
 
         // we calculate the position of the lander according to the elapsed time from the library
         landerMath.position(FixedTrait::new_unscaled(elapsed.into(), false));
 
-        // convert back to stored lander
+        landerMath.print_unscaled();
+
         Lander {
             last_update: self.last_update,
             position_x: landerMath.position.x.mag,
@@ -89,8 +88,27 @@ impl ImplLander of LanderTrait {
             fuel_sign: self.fuel_sign,
         }
     }
+    // TODO: check if the lander is within the landing zone
     fn has_landed(self: @Lander) -> bool {
-        false
+        let info = starknet::get_block_info().unbox();
+
+        // check if the lander is within the landing zone
+        let mut landerMath = self.to_math();
+
+        if (landerMath.position.y.mag > 0) {
+            return false;
+        }
+
+        let current_position = landerMath
+            .position(
+                FixedTrait::new_unscaled((info.block_timestamp - *self.last_update).into(), false)
+            );
+
+        if (current_position.position.y.mag < 0) {
+            return false;
+        }    
+
+        true
     }
     fn to_math(self: @Lander) -> LanderMath {
         let position = Vec2 {

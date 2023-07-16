@@ -72,6 +72,7 @@ mod tests {
     use stark_lander::components::lander::{lander, Lander};
     use stark_lander::systems::burn::burn;
     use stark_lander::systems::start::start;
+    use stark_lander::systems::position::position;
 
     use cubit::types::fixed::{Fixed, FixedTrait};
 
@@ -92,6 +93,7 @@ mod tests {
         let mut systems: Array = Default::default();
         systems.append(burn::TEST_CLASS_HASH);
         systems.append(start::TEST_CLASS_HASH);
+        systems.append(position::TEST_CLASS_HASH);
 
         // deploy executor, world and register components/systems
         let world = spawn_test_world(components, systems);
@@ -118,24 +120,29 @@ mod tests {
         // assert(*lander[3] == 12000, 'y is wrong');
 
         // shift time forward
-        testing::set_block_timestamp(STARTING_BLOCKTIME + 1);
+        testing::set_block_timestamp(STARTING_BLOCKTIME + 10);
 
         let mut burn_call_data: Array = ArrayTrait::<felt252>::new();
         burn_call_data.append(game_id.into());
-        burn_call_data.append(5.into());
-        burn_call_data.append(45.into());
+        burn_call_data.append(10.into());
+        burn_call_data.append(0.into());
         burn_call_data.append(1.into());
         burn_call_data.append(5.into());
 
         let mut res = world.execute('burn'.into(), burn_call_data.span());
 
         let new_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
-        
-        // new_lander[1].print();
-        // assert(*new_lander[0] != STARTING_BLOCKTIME.into(), 'x is wrong');
-        // assert(*new_lander[1] == 1000, 'x is wrong');
-        // assert(*new_lander[2] != 0, 'x sign is wrong');
-        // assert(*new_lander[3] == 12000, 'y is wrong');
+
+        let mut position_call_data: Array = ArrayTrait::<felt252>::new();
+        position_call_data.append(game_id.into());
+
+        testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
+
+        // world.execute('position'.into(), position_call_data.span());
+
+        // testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
+
+        // world.execute('position'.into(), position_call_data.span());
 
     }
 }
