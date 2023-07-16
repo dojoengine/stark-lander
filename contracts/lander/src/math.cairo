@@ -191,7 +191,7 @@ fn test_update() {
     let thrust = FixedTrait::new_unscaled(10, false);
     let delta_time_burn = FixedTrait::new_unscaled(5, false);
 
-    // lander.burn(5, -45, 5);
+    // lander.burn(10, -45, 5);
     lander.burn(thrust, angle, delta_time_burn);
     lander.print_unscaled();
 
