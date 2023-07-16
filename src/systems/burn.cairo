@@ -1,5 +1,5 @@
 #[system]
-mod Burn {
+mod burn {
     use array::ArrayTrait;
     use box::BoxTrait;
     use traits::Into;
@@ -35,7 +35,7 @@ mod Burn {
         lander.position(elapsed);
 
         // burn!!
-        lander.burn(thrust_felt, angle_deg_felt, delta_time_felt);
+        // lander.burn(thrust_felt, angle_deg_felt, delta_time_felt);
 
         // save new state of Lander
         set !(ctx.world, player_sk, (lander));
