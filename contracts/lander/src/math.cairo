@@ -106,7 +106,7 @@ impl ImplLanderMath of ILanderMath {
         let fuel_consumed = fuel_consumption * delta_time;
         self.fuel -= fuel_consumed;
         // self.angle = FixedTrait::from_unscaled_felt(angle_deg_felt);
-        self.angle = angle;
+        self.angle = angle_deg;
 
         self
     }
@@ -195,7 +195,7 @@ fn test_update() {
         position, velocity, FixedTrait::new_unscaled(45, true), FixedTrait::new_unscaled(100, false)
     );
 
-    let thrust = FixedTrait::new_unscaled(100, false);
+    let thrust = FixedTrait::new_unscaled(10, false);
     let angle = FixedTrait::new_unscaled(45, true);
     let delta_time = FixedTrait::new_unscaled(5, false);
 
@@ -203,7 +203,6 @@ fn test_update() {
     // lander.burn(5, -45, 5);
     lander.burn(thrust, angle, delta_time);
     lander.print_unscaled();
-
 
     lander.position(FixedTrait::new_unscaled(100, false));
 
