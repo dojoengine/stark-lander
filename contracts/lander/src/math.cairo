@@ -39,12 +39,7 @@ trait ILanderMath {
     fn new(position: Vec2, velocity: Vec2, angle: Fixed, fuel: Fixed) -> LanderMath;
 
     // adjusts the lander's position, velocity, and fuel based on the thrust and angle
-    fn burn(
-        ref self: LanderMath,
-        thrust: Fixed,
-        angle_deg: Fixed,
-        delta_time: Fixed
-    ) -> LanderMath;
+    fn burn(ref self: LanderMath, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed) -> LanderMath;
 
     // returns the lander's position at the given time
     fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath;
@@ -61,10 +56,7 @@ impl ImplLanderMath of ILanderMath {
         LanderMath { position, velocity, angle, fuel }
     }
     fn burn(
-        ref self: LanderMath,
-        thrust: Fixed,
-        angle_deg: Fixed,
-        delta_time: Fixed
+        ref self: LanderMath, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed
     ) -> LanderMath {
         // let thrust = FixedTrait::new(thrust_felt, false);
 
@@ -191,19 +183,19 @@ fn test_update() {
         x: FixedTrait::new_unscaled(100, false), y: FixedTrait::new_unscaled(100, true)
     };
 
-    let mut lander = ImplLanderMath::new(
-        position, velocity, FixedTrait::new_unscaled(45, true), FixedTrait::new_unscaled(100, false)
-    );
+    let angle = FixedTrait::new_unscaled(45, true);
+    let fuel = FixedTrait::new_unscaled(100, false);
+
+    let mut lander = ImplLanderMath::new(position, velocity, angle, fuel);
 
     let thrust = FixedTrait::new_unscaled(10, false);
-    let angle = FixedTrait::new_unscaled(45, true);
-    let delta_time = FixedTrait::new_unscaled(5, false);
-
+    let delta_time_burn = FixedTrait::new_unscaled(5, false);
 
     // lander.burn(5, -45, 5);
-    lander.burn(thrust, angle, delta_time);
+    lander.burn(thrust, angle, delta_time_burn);
     lander.print_unscaled();
 
-    lander.position(FixedTrait::new_unscaled(100, false));
-
+    let delta_time_position = FixedTrait::new_unscaled(10, false);
+    lander.position(delta_time_position);
+    lander.print_unscaled();
 }
