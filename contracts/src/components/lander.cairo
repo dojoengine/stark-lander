@@ -28,7 +28,7 @@ trait LanderTrait {
 
     // burn adjustment
     fn burn(
-        ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
+        ref self: Lander, thrust_felt: u128, angle_deg_felt: u128, delta_time_felt: u128
     ) -> Lander;
 
     // check within range
@@ -40,7 +40,7 @@ trait LanderTrait {
 
 impl ImplLander of LanderTrait {
     fn burn(
-        ref self: Lander, thrust_felt: felt252, angle_deg_felt: felt252, delta_time_felt: felt252
+        ref self: Lander, thrust_felt: u128, angle_deg_felt: u128, delta_time_felt: u128
     ) -> Lander {
         let info = starknet::get_block_info().unbox();
 

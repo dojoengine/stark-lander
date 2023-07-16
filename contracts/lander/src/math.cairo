@@ -41,13 +41,13 @@ trait ILanderMath {
     // adjusts the lander's position, velocity, and fuel based on the thrust and angle
     fn burn(
         ref self: LanderMath,
-        thrust_felt: felt252,
-        angle_deg_felt: felt252,
-        delta_time_felt: felt252
+        thrust_felt: u128,
+        angle_deg_felt: u128,
+        delta_time_felt: u128
     ) -> LanderMath;
 
     // returns the lander's position at the given time
-    fn position(ref self: LanderMath, delta_time_felt: felt252) -> LanderMath;
+    fn position(ref self: LanderMath, delta_time_felt: u128) -> LanderMath;
 
     // wins if the lander is on the landing pad with a low enough velocity and angle
     fn check_landed(ref self: LanderMath) -> bool;
@@ -62,15 +62,16 @@ impl ImplLanderMath of ILanderMath {
     }
     fn burn(
         ref self: LanderMath,
-        thrust_felt: felt252,
-        angle_deg_felt: felt252,
-        delta_time_felt: felt252
+        thrust_felt: u128,
+        angle_deg_felt: u128,
+        delta_time_felt: u128
     ) -> LanderMath {
-        let thrust = FixedTrait::from_unscaled_felt(thrust_felt);
+        let thrust = FixedTrait::new_unscaled(thrust_felt, false);
 
-        let angle = deg_to_rad(FixedTrait::from_unscaled_felt(angle_deg_felt));
+        // let angle = deg_to_rad(FixedTrait::from_unscaled_felt(angle_deg_felt));
+        let angle = FixedTrait::new_unscaled(angle_deg_felt, false);
 
-        let delta_time = FixedTrait::from_unscaled_felt(delta_time_felt);
+        let delta_time = FixedTrait::new_unscaled(delta_time_felt, false);
 
         // Update gravity -----------------------------
 
@@ -104,12 +105,13 @@ impl ImplLanderMath of ILanderMath {
 
         let fuel_consumed = fuel_consumption * delta_time;
         self.fuel -= fuel_consumed;
-        self.angle = FixedTrait::from_unscaled_felt(angle_deg_felt);
+        // self.angle = FixedTrait::from_unscaled_felt(angle_deg_felt);
+        self.angle = FixedTrait::new_unscaled(angle_deg_felt, false);
 
         self
     }
-    fn position(ref self: LanderMath, delta_time_felt: felt252) -> LanderMath {
-        let delta_time = FixedTrait::from_unscaled_felt(delta_time_felt);
+    fn position(ref self: LanderMath, delta_time_felt: u128) -> LanderMath {
+        let delta_time = FixedTrait::new_unscaled(delta_time_felt, false);
 
         // Update gravity -----------------------------
 
@@ -193,8 +195,8 @@ fn test_update() {
         position, velocity, FixedTrait::new(45, false), FixedTrait::new(100, false)
     );
 
-    lander.burn(5, -45, 5);
-
+    // lander.burn(5, -45, 5);
+    lander.burn(5, 45, 5);
     lander.print_unscaled();
 
     // (lander.position.x.mag).print();

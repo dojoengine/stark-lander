@@ -86,8 +86,8 @@ mod tests {
 
         // deploy executor, world and register components/systems
         let world = spawn_test_world(components, systems);
-        let spawn_call_data: Array = Default::default();
-        let mut res = world.execute('start'.into(), spawn_call_data.span());
+        let start_call_data: Array = Default::default();
+        let mut res = world.execute('start'.into(), start_call_data.span());
 
         assert(res.len() > 0, 'did not spawn');
 
@@ -100,5 +100,15 @@ mod tests {
         assert(*lander[1] == 100, 'x is wrong');
         assert(*lander[2] == 0, 'x sign is wrong');
         assert(*lander[3] == 10000, 'y is wrong');
+
+
+        let mut burn_call_data: Array = ArrayTrait::<felt252>::new();
+        burn_call_data.append(game_id.into());
+        burn_call_data.append(1.into());
+        burn_call_data.append(1.into());
+        burn_call_data.append(1.into());
+
+        let mut res = world.execute('burn'.into(), burn_call_data.span());
+
     }
 }
