@@ -1,5 +1,6 @@
 #[system]
 mod burn {
+    use core::debug::PrintTrait;
     use array::ArrayTrait;
     use box::BoxTrait;
     use traits::Into;
@@ -33,10 +34,12 @@ mod burn {
 
         // since time has elapsed we need to find out where the lander actually is
         // then compute position based on elapsed time and current state
-        lander.position(elapsed);
+        let mut new_position = lander.position(elapsed);
 
         // burn!!
-        lander.burn(thrust_felt, angle_deg_felt, angle_deg_sign, delta_time_felt);
+        new_position.burn(thrust_felt, angle_deg_felt, angle_deg_sign, delta_time_felt);
+
+        new_position.position_x.print();
 
         // save new state of Lander
         set !(ctx.world, player_sk, (lander));

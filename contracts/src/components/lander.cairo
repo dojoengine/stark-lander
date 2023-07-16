@@ -53,7 +53,9 @@ impl ImplLander of LanderTrait {
 
         landerMath.burn(thrust_felt, angle_deg_felt, angle_deg_sign, delta_time_felt);
 
-        landerMath.print_unscaled();
+        // landerMath.print_unscaled();
+
+        // landerMath.position.x.mag.print();
 
         Lander {
             last_update: info.block_timestamp,
