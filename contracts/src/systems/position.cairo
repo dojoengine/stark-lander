@@ -24,6 +24,7 @@ mod position {
 
         let elapsed = info.block_timestamp - lander.last_update;
 
-        lander.position(elapsed)
+        let mut new_position = lander.position(elapsed);
+        new_position
     }
 }
