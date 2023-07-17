@@ -28,21 +28,6 @@ export const cardStyle = {
 		color: "#157342",
 		isPressed: false,
 	})}")`,
-	_hover: {
-		color: "neon.300",
-		borderImageSource: `url("data:image/svg+xml,${BorderImage({
-			color: "#157342",
-			isPressed: false,
-		})}")`,
-	},
-	_active: {
-		top: "2px",
-		left: "2px",
-		borderImageSource: `url("data:image/svg+xml,${BorderImage({
-			color: "#157342",
-			isPressed: true,
-		})}")`,
-	},
 };
 
 // use clipPath to "cut" corners
