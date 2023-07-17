@@ -23,7 +23,7 @@ function Slider() {
 	const onUp = () => setValue(value + 1);
 
 	return (
-		<HStack className="py-3 justify-between">
+		<HStack className="py-3 justify-between my-4">
 			<Text width="120px">Roll:</Text>
 			<Card
 				variant={"pixelated"}
