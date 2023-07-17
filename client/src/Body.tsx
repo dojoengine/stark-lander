@@ -1,12 +1,12 @@
 import Button from "./components/Button";
-import { Card, HStack } from "@chakra-ui/react";
+import Slider from "./components/Slider";
 
 function Body() {
 	return (
-		<div className="h-16 max-w-[720px] flex-1">
+		<div className=" max-w-[720px] flex-1">
 			{/* this is where u put all the main components */}
-			<Button>Something</Button>
-			<Card className="h-32 " variant={"pixelated"}></Card>
+			<Slider />
+			<Button w="full">Ignite</Button>
 		</div>
 	);
 }
