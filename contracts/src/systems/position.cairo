@@ -12,7 +12,7 @@ mod position {
     use stark_lander::components::lander::{Lander, LanderTrait};
     use stark_lander::components::fuel::Fuel;
 
-    fn execute(ctx: Context, game_id: u32) -> Lander {
+    fn execute(ctx: Context, game_id: u32) {
         let info = starknet::get_block_info().unbox();
 
         let player_id: felt252 = ctx.origin.into();
@@ -25,6 +25,8 @@ mod position {
         let elapsed = info.block_timestamp - lander.last_update;
 
         let mut new_position = lander.position(elapsed);
-        new_position
+
+        set !(ctx.world, player_sk, (new_position));
+        return ();
     }
 }
