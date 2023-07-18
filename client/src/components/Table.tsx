@@ -60,11 +60,11 @@ export type RowData = RowDataWithoutTime & {
 };
 
 export interface RowDataWithoutTime {
-	height: string;
-	speed: string;
-	pitch: string;
-	angle: string;
-	fuel: string;
+	height: number;
+	speed: number;
+	pitch: number;
+	angle: number;
+	fuel: number;
 }
 
 interface Props {
