@@ -23,7 +23,7 @@ export function setupNetwork() {
         provider,
         signer,
         execute: async (system: string, call_data: num.BigNumberish[]) => execute(signer, system, call_data),
-        call: async (call_data: num.BigNumberish[]) => call(provider, call_data)
+        call: async (call_data: any[]) => call(provider, call_data)
     };
 }
 
@@ -46,7 +46,7 @@ export async function execute(account: Account, system: string, call_data: num.B
     return call;
 }
 
-export async function call(provider: RpcProvider, call_data: num.BigNumberish[]) {
+export async function call(provider: RpcProvider, call_data: any[]) {
     // const { abi: testAbi } = await provider.getClassAt(WORLD_ADDRESS);
 
     // console.log(testAbi)
@@ -54,7 +54,7 @@ export async function call(provider: RpcProvider, call_data: num.BigNumberish[])
 
     console.log(call_data)
 
-    const game = await contract.call('execute', ["0"]);
+    const game = await contract.call('execute',  call_data);
 
     console.log("game", game)
 }

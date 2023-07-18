@@ -27,7 +27,7 @@ function Body() {
 
 	function call() {
 		setupNetwork()
-			.call(["8101821151424638830", "0"])
+			.call(["8101821151424638830", ["0"]])
 			.catch((error) => {
 				console.log(error);
 			});
