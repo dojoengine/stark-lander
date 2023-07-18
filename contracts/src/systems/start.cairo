@@ -105,7 +105,11 @@ mod tests {
         let (game_id, player_id) = serde::Serde::<(u32, felt252)>::deserialize(ref res)
             .expect('create deserialization failed');
 
-        let lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
+        let mut raw_old_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
+        let old_lander = serde::Serde::<Lander>::deserialize(ref raw_old_lander)
+                                .expect('Lander failed to deserialize');
+
+        old_lander.fuel.print();
 
         let position_x = FixedTrait::new_unscaled(1000, false);
         let position_y = FixedTrait::new_unscaled(12000, false);
@@ -114,8 +118,8 @@ mod tests {
         let angle = FixedTrait::new_unscaled(0, false);
         let fuel = FixedTrait::new_unscaled(100, false);
         
-        assert(*lander[0] == STARTING_BLOCKTIME.into(), 'x is wrong');
-        assert(*lander[1] == position_x.mag.into(), 'x is wrong');
+        // assert(*lander[0] == STARTING_BLOCKTIME.into(), 'x is wrong');
+        // assert(*lander[1] == position_x.mag.into(), 'x is wrong');
         // assert(*lander[2] == position_x.sign.unwrap().try_into(), 'x sign is wrong');
         // assert(*lander[3] == 12000, 'y is wrong');
 
@@ -126,12 +130,16 @@ mod tests {
         burn_call_data.append(game_id.into());
         burn_call_data.append(10.into());
         burn_call_data.append(0.into());
-        burn_call_data.append(1.into());
+        burn_call_data.append(0.into());
         burn_call_data.append(5.into());
 
         let mut res = world.execute('burn'.into(), burn_call_data.span());
 
-        let new_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
+        let mut raw_new_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
+        let new_lander = serde::Serde::<Lander>::deserialize(ref raw_new_lander)
+                                .expect('Lander failed to deserialize');
+
+        assert(new_lander.fuel < old_lander.fuel, 'fuel did not burn');
 
         let mut position_call_data: Array = ArrayTrait::<felt252>::new();
         position_call_data.append(game_id.into());

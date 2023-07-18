@@ -45,7 +45,7 @@ mod burn {
 
         new_position.burn(thrust, angle, delta_time);
 
-        new_position.position_x.print();
+        // new_position.position_x.print();
 
         // save new state of Lander
         set !(ctx.world, player_sk, (lander));

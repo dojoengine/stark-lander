@@ -45,7 +45,7 @@ impl ImplLander of LanderTrait {
 
         landerMath.burn(thrust, angle_deg, delta_time);
 
-        landerMath.print_unscaled();
+        // landerMath.print_unscaled();
 
         Lander {
             last_update: info.block_timestamp,
@@ -70,7 +70,7 @@ impl ImplLander of LanderTrait {
         // we calculate the position of the lander according to the elapsed time from the library
         landerMath.position(FixedTrait::new_unscaled(elapsed.into(), false));
 
-        landerMath.print_unscaled();
+        // landerMath.print_unscaled();
 
         Lander {
             last_update: self.last_update,
