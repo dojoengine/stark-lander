@@ -5,7 +5,7 @@ import { HStack } from "@chakra-ui/react";
 import { KATANA_ACCOUNT_1_ADDRESS, setupNetwork } from "./dojo/setupNetwork";
 import Table, { RowData } from "./components/Table";
 import Control from "./components/Control";
-import math from "./utils/math"
+import { Lander, parseRawCalldataAsLander } from "./types/components";
 
 enum Stage {
 	Idle,
@@ -19,16 +19,16 @@ function Body() {
 	const [rows, setRows] = useState<RowData[]>([
 		{
 			fuel: "100",
-			height: "1000",
+			height: "120000",
 			pitch: "0",
-			angle: "0",
-			speed: "1000",
+			angle: "45",
+			speed: "100",
 			time: "00:00",
 		},
 	]);
 
 	const execute = function () {
-		// setStage(Stage.Playing);
+		setStage(Stage.Playing);
 
 		setupNetwork()
 			.execute("start", [])
@@ -37,26 +37,29 @@ function Body() {
 			});
 	};
 
-	const call = function () {
+	const call = function (callback: (lander: Lander) => void) {
 		setupNetwork()
-			.call(["8101821151424638830", ["0x0", KATANA_ACCOUNT_1_ADDRESS]])
-			.then((result) => console.log("result", result))
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-
-	const burn = function () {
-		setupNetwork()
-			.execute("burn", [angle])
+			.call(["8101821151424638830", ["0", KATANA_ACCOUNT_1_ADDRESS]])
+			.then((result) => {
+				const data = result as string[];
+				console.log("raw", data);
+				callback(parseRawCalldataAsLander(data));
+			})
 			.catch((error) => {
 				console.log(error);
 			});
 	};
 
 	const onIgnite = function () {
-		// execute `burn` system
-		console.log("onIgnite", angle);
+		const angle_mag = Math.abs(angle).toString();
+		const angle_sign = angle >= 0 ? "0" : "1";
+
+		setupNetwork()
+			.execute("burn", ["0", "10", angle_mag, angle_sign, "1"])
+			.then((result) => console.log("execute ", result))
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	const onChangeAngle = function (angle: number) {
@@ -66,9 +69,9 @@ function Body() {
 
 	const onAddRow = function (data: RowData) {
 		setRows((rows) => [...rows, data]);
-		// go to bottom of table
 	};
 
+	// Initialize the game loop
 	useEffect(() => {
 		if (stage !== Stage.Playing) return;
 
@@ -77,8 +80,17 @@ function Body() {
 
 		// Listen for messages from the worker
 		myWorker.onmessage = function (e) {
-			// console.log("Message received from worker", e.data);
-			onAddRow(e.data as RowData);
+			// onAddRow(e.data as RowData);
+			call((lander) => {
+				onAddRow({
+					time: e.data as string,
+					speed: lander.velocity_y.toString(),
+					angle: lander.angle.toString(),
+					fuel: lander.fuel.toString(),
+					height: lander.position_y.toString(),
+					pitch: "0",
+				});
+			});
 		};
 
 		// Make sure to terminate the worker when you're done with it
@@ -96,10 +108,7 @@ function Body() {
 			{stage === Stage.Idle && (
 				<HStack className="my-10">
 					<Button flex="1" onClick={() => execute()}>
-						start
-					</Button>
-					<Button flex="1" onClick={() => call()}>
-						call
+						Start
 					</Button>
 				</HStack>
 			)}

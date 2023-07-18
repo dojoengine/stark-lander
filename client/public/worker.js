@@ -3,15 +3,8 @@ let seconds = 0;
 
 setInterval(() => {
 	const time = getTime();
-
-	self.postMessage({
-		time,
-		height: "999",
-		speed: "1000",
-		pitch: "0",
-		angle: "0",
-		fuel: "99",
-	});
+	// send a message to notify for game loop
+	self.postMessage(time);
 }, 1000);
 
 function getTime() {

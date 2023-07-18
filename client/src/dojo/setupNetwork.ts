@@ -64,17 +64,8 @@ export async function execute(
 	return call;
 }
 
-export async function call(provider: RpcProvider, call_data: any[]) {
-	// const { abi: testAbi } = await provider.getClassAt(WORLD_ADDRESS);
-
-	// console.log(testAbi)
-	const contract = new Contract(abi, WORLD_ADDRESS, provider);
-
-	// console.log(call_data);
-
-	const game = await contract.call("execute", call_data);
-
-	console.log("game", game);
+export function call(provider: RpcProvider, call_data: any[]) {
+	return new Contract(abi, WORLD_ADDRESS, provider).call("execute", call_data);
 }
 
 export function strTofelt252Felt(str: string): string {
