@@ -27,7 +27,7 @@ function Body() {
 
 	function call() {
 		setupNetwork()
-			.call(["position", 0])
+			.call(["8101821151424638830", "0"])
 			.catch((error) => {
 				console.log(error);
 			});
@@ -40,6 +40,7 @@ function Body() {
 			{stage === Stage.Idle && (
 				<Center className="mt-32">
 					<Button onClick={() => execute()}>start</Button>
+					<Button onClick={() => call()}>call</Button>
 				</Center>
 			)}
 

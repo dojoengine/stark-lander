@@ -52,9 +52,9 @@ export async function call(provider: RpcProvider, call_data: num.BigNumberish[])
     // console.log(testAbi)
     const contract = new Contract(abi, WORLD_ADDRESS, provider);
 
-    console.log(contract)
+    console.log(call_data)
 
-    const game = await contract.call('execute', call_data);
+    const game = await contract.call('execute', ["0"]);
 
     console.log("game", game)
 }
