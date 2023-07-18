@@ -5,8 +5,7 @@ import { HStack } from "@chakra-ui/react";
 import { KATANA_ACCOUNT_1_ADDRESS, setupNetwork } from "./dojo/setupNetwork";
 import Table, { RowData } from "./components/Table";
 import Control from "./components/Control";
-
-const classHash = "0x48667cc1e24a07f65b4ce31d10fd9f6457d6451b0226433f8dc794c31c67b4f";
+import math from "./utils/math"
 
 enum Stage {
 	Idle,
