@@ -46,7 +46,7 @@ impl ImplLander of LanderTrait {
 
         landerMath.burn(thrust, angle_deg, delta_time);
 
-        landerMath.print_unscaled();
+        // landerMath.print_unscaled();
 
         Lander {
             last_update: info.block_timestamp,
