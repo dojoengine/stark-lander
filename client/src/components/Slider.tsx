@@ -9,18 +9,15 @@ import {
 	Box,
 } from "@chakra-ui/react";
 import { ArrowEnclosed } from "./icons";
-import { useEffect, useState } from "react";
 
-function Slider() {
-	const [value, setValue] = useState(0);
+interface Props {
+	angle: number;
+	onChangeAngle: (angle: number) => void;
+}
 
-	useEffect(() => {
-		console.log("my value", value);
-	}, [value]);
-
-	const onDown = () => setValue(value - 1);
-
-	const onUp = () => setValue(value + 1);
+function Slider({ angle, onChangeAngle }: Props) {
+	const onUp = (angle: number) => onChangeAngle(angle + 1);
+	const onDown = (angle: number) => onChangeAngle(angle - 1);
 
 	return (
 		<HStack className="py-3 justify-between my-4">
@@ -30,7 +27,7 @@ function Slider() {
 				width={"90px"}
 				className="flex items-center justify-center h-[40px]"
 			>
-				{value}
+				{angle}
 			</Card>
 			<ChakraSlider
 				aria-label="slider-ex-1"
@@ -38,9 +35,9 @@ function Slider() {
 				width="300px"
 				min={-180}
 				max={180}
-				value={value}
+				value={angle}
 				className="mx-3"
-				onChange={(value) => setValue(value)}
+				onChange={onChangeAngle}
 			>
 				<SliderTrack>
 					<SliderFilledTrack />
@@ -50,7 +47,7 @@ function Slider() {
 			<HStack>
 				<Box
 					cursor="pointer"
-					onClick={onDown}
+					onClick={() => onDown(angle - 1)}
 					color="neon.500"
 					_hover={{
 						color: "neon.300",
@@ -65,7 +62,7 @@ function Slider() {
 				</Box>
 				<Box
 					cursor="pointer"
-					onClick={onUp}
+					onClick={() => onUp(angle + 1)}
 					color="neon.500"
 					_hover={{
 						color: "neon.300",

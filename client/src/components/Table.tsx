@@ -61,29 +61,40 @@ function Row({ time, height, speed, pitch, roll, fuel }: RowProps) {
 	);
 }
 
-function Table() {
+export type RowData = RowDataWithoutTime & {
+	time: string;
+};
+
+export interface RowDataWithoutTime {
+	height: string;
+	speed: string;
+	pitch: string;
+	roll: string;
+	fuel: string;
+}
+
+interface Props {
+	rows: RowData[];
+}
+
+function Table({ rows }: Props) {
 	return (
-		<Card className="h-[480px]" variant="pixelated" fontSize="sm" overflow="auto">
+		<Card className="h-[360px]" variant="pixelated" fontSize="sm" overflow="auto">
 			<div className="sticky z-10 top-0 left-0 right-0 bg-[#202F20] px-5">
 				<Title />
 				<Divider />
 			</div>
 			<VStack align="normal" position="relative" className=" py-1 px-5">
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
-				<Row time="00:00" height="1000" speed="0" pitch="0" roll="0" fuel="100" />
+				{rows.map((row) => (
+					<Row
+						time={row.time}
+						height={row.height}
+						speed={row.speed}
+						pitch={row.pitch}
+						roll={row.roll}
+						fuel={row.fuel}
+					/>
+				))}
 			</VStack>
 		</Card>
 	);
