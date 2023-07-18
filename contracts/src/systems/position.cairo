@@ -25,9 +25,7 @@ mod position {
         let elapsed = info.block_timestamp - lander.last_update;
 
         let mut new_position = lander.position(elapsed);
-
-        set !(ctx.world, player_sk, (new_position));
-
-        return lander;
+        
+        new_position
     }
 }
