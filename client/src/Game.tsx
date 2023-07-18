@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Button from "./components/Button";
-import Slider from "./components/Slider";
 import Prompt from "./components/Prompt";
 import Table, { RowData } from "./components/Table";
+import Control from "./components/Control";
 
 function Game() {
 	const [angle, setAngle] = useState<number>(0);
@@ -11,7 +10,7 @@ function Game() {
 			fuel: "100",
 			height: "1000",
 			pitch: "0",
-			roll: "0",
+			angle: "0",
 			speed: "1000",
 			time: "00:00",
 		},
@@ -29,6 +28,7 @@ function Game() {
 
 	const onAddRow = function (data: RowData) {
 		setRows((rows) => [...rows, data]);
+		// go to bottom of table
 	};
 
 	useEffect(() => {
@@ -37,7 +37,7 @@ function Game() {
 
 		// Listen for messages from the worker
 		myWorker.onmessage = function (e) {
-			console.log("Message received from worker", e.data);
+			// console.log("Message received from worker", e.data);
 			onAddRow(e.data as RowData);
 		};
 
@@ -51,10 +51,7 @@ function Game() {
 		<>
 			<Prompt />
 			<Table rows={rows} />
-			<Slider angle={angle} onChangeAngle={onChangeAngle} />
-			<Button w="full" onClick={onIgnite}>
-				Ignite
-			</Button>
+			<Control angle={angle} onChangeAngle={onChangeAngle} onIgnite={onIgnite} />
 		</>
 	);
 }

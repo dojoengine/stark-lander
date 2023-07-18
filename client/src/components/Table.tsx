@@ -1,4 +1,5 @@
 import { Box, Card, Divider, HStack, VStack } from "@chakra-ui/react";
+import { useEffect, useRef } from "react";
 
 function Title() {
 	return (
@@ -32,16 +33,9 @@ function Title() {
 	);
 }
 
-type RowProps = {
-	time: string;
-	height: string;
-	speed: string;
-	pitch: string;
-	roll: string;
-	fuel: string;
-};
+type RowProps = RowData;
 
-function Row({ time, height, speed, pitch, roll, fuel }: RowProps) {
+function Row({ time, height, speed, pitch, angle, fuel }: RowProps) {
 	return (
 		<HStack
 			color="neon.400"
@@ -55,7 +49,7 @@ function Row({ time, height, speed, pitch, roll, fuel }: RowProps) {
 			<Box className="flex gap-2 w-[115px]">{height}</Box>
 			<Box className="flex gap-2 w-[115px]">{speed}</Box>
 			<Box className="flex gap-2 w-[115px] relative">{pitch}</Box>
-			<Box className="flex gap-2 w-[115px]">{roll}</Box>
+			<Box className="flex gap-2 w-[115px]">{angle}</Box>
 			<Box className="flex gap-2 w-[115px]">{fuel}</Box>
 		</HStack>
 	);
@@ -69,7 +63,7 @@ export interface RowDataWithoutTime {
 	height: string;
 	speed: string;
 	pitch: string;
-	roll: string;
+	angle: string;
 	fuel: string;
 }
 
@@ -78,8 +72,27 @@ interface Props {
 }
 
 function Table({ rows }: Props) {
+	const tableRef = useRef<HTMLDivElement | null>(null);
+
+	// scroll to the bottom of the table when a new row is added
+	useEffect(() => {
+		if (tableRef.current) {
+			const { scrollHeight, scrollTop, clientHeight } = tableRef.current;
+
+			if (scrollHeight - scrollTop < clientHeight + 150) {
+				tableRef.current.scrollTo(0, tableRef.current.scrollHeight);
+			}
+		}
+	}, [rows]);
+
 	return (
-		<Card className="h-[360px]" variant="pixelated" fontSize="sm" overflow="auto">
+		<Card
+			ref={tableRef}
+			className="h-[360px]"
+			variant="pixelated"
+			fontSize="sm"
+			overflow="auto"
+		>
 			<div className="sticky z-10 top-0 left-0 right-0 bg-[#202F20] px-5">
 				<Title />
 				<Divider />
@@ -91,7 +104,7 @@ function Table({ rows }: Props) {
 						height={row.height}
 						speed={row.speed}
 						pitch={row.pitch}
-						roll={row.roll}
+						angle={row.angle}
 						fuel={row.fuel}
 					/>
 				))}

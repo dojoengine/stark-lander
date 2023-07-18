@@ -11,17 +11,17 @@ import {
 import { ArrowEnclosed } from "./icons";
 
 interface Props {
-	angle: number;
+	angle?: number;
 	onChangeAngle: (angle: number) => void;
 }
 
-function Slider({ angle, onChangeAngle }: Props) {
+function Slider({ angle = 0, onChangeAngle }: Props) {
 	const onUp = (angle: number) => onChangeAngle(angle + 1);
 	const onDown = (angle: number) => onChangeAngle(angle - 1);
 
 	return (
 		<HStack className="py-3 justify-between my-4">
-			<Text width="120px">Roll:</Text>
+			<Text width="120px">Angle:</Text>
 			<Card
 				variant={"pixelated"}
 				width={"90px"}

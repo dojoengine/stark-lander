@@ -1,7 +1,20 @@
 let startTime = new Date();
 let seconds = 0;
 
-const intervalId = setInterval(() => {
+setInterval(() => {
+	const time = getTime();
+
+	self.postMessage({
+		time,
+		height: "999",
+		speed: "1000",
+		pitch: "0",
+		angle: "0",
+		fuel: "99",
+	});
+}, 1000);
+
+function getTime() {
 	let now = new Date();
 	let totalSeconds = Math.floor((now - startTime) / 1000);
 
@@ -13,12 +26,5 @@ const intervalId = setInterval(() => {
 		"0"
 	)}`;
 
-	self.postMessage({
-		time: timeString,
-		height: "999",
-		speed: "1000",
-		pitch: "0",
-		roll: "0",
-		fuel: "99",
-	});
-}, 1000);
+	return timeString;
+}
