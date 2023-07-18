@@ -8,24 +8,27 @@ mod position {
 
     use dojo::world::Context;
 
-    use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128};
-
     use stark_lander::components::lander::{Lander, LanderTrait};
     use stark_lander::components::fuel::Fuel;
 
     fn execute(ctx: Context, game_id: u32, player_id: ContractAddress) -> Lander {
+        // block
         let info = starknet::get_block_info().unbox();
 
         let player_id: felt252 = player_id.into();
+
+        // define query
         let player_sk: Query = (game_id, player_id).into();
 
         // get current state
-        let mut lander: Lander = get !(ctx.world, player_sk, Lander);
+        let mut lander: Lander = get!(ctx.world, player_sk, Lander);
 
+        // get elapsed between last update
         let elapsed = info.block_timestamp - lander.last_update;
 
-        let mut new_position = lander.position(elapsed);
-        
+        // compute position according to time
+        let mut new_position = lander.position(elapsed);    
+
         new_position
     }
 }

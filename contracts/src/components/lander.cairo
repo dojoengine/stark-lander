@@ -6,6 +6,7 @@ use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, Fixed
 use cubit::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
 use cubit::math::trig::{cos, sin, PI_u128};
 
+// TODO: Make multiple components for the lander
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Lander {
     last_update: u64,
@@ -63,7 +64,6 @@ impl ImplLander of LanderTrait {
             fuel_sign: landerMath.fuel.sign,
         }
     }
-    // #[computed(key = “is_zero”)]
     fn position(ref self: Lander, elapsed: u64) -> Lander {
         let mut landerMath = self.to_math();
 
