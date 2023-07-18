@@ -26,7 +26,7 @@ export const cardStyle = {
 	borderImageWidth: "4px",
 	borderImageSource: `url("data:image/svg+xml,${BorderImage({
 		color: "#157342",
-		isPressed: false,
+		isPressed: true,
 	})}")`,
 };
 

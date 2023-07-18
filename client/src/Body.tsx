@@ -5,7 +5,8 @@ import { KATANA_ACCOUNT_1_ADDRESS, setupNetwork } from "./dojo/setupNetwork";
 import Table, { RowData } from "./components/Table";
 import Control from "./components/Control";
 import { Lander, parseRawCalldataAsLander } from "./types/components";
-import { Center } from "@chakra-ui/react";
+import { Center, VStack } from "@chakra-ui/react";
+import Prompt from "./components/Prompt";
 
 enum Stage {
 	Idle,
@@ -13,7 +14,7 @@ enum Stage {
 	End,
 }
 
-enum EndState {
+export enum EndState {
 	Success,
 	Failure,
 }
@@ -130,7 +131,14 @@ function Body() {
 
 		if (height <= 0 || velocity <= 0) {
 			setStage(Stage.End);
-			setEndState(EndState.Success);
+
+			// only if the lander has landed properly
+			// we can end the game in success.
+			if (height === 0 && velocity === 0) {
+				setEndState(EndState.Success);
+			} else {
+				setEndState(EndState.Failure);
+			}
 		}
 	}, [stage, rows]);
 
@@ -177,7 +185,12 @@ function Body() {
 				</Center>
 			)}
 
-			{stage !== Stage.Idle && <Table rows={rows} />}
+			{stage !== Stage.Idle && (
+				<VStack>
+					<Prompt gameEndState={endState} />
+					<Table rows={rows} />
+				</VStack>
+			)}
 
 			{stage == Stage.Playing && (
 				<Control
@@ -188,7 +201,7 @@ function Body() {
 			)}
 
 			{stage === Stage.End && (
-				<Button w="full" onClick={() => onResetGame()}>
+				<Button w="full" onClick={() => onResetGame()} className="mt-10">
 					Retry
 				</Button>
 			)}
