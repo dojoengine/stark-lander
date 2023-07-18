@@ -170,7 +170,7 @@ function Body() {
 			{/* this is where u put all the main components */}
 
 			{stage === Stage.Idle && (
-				<Center>
+				<Center h="full">
 					<Button w="full" onClick={() => onStartGame()}>
 						Start
 					</Button>
