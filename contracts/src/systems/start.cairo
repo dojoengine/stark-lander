@@ -29,7 +29,7 @@ mod start {
         let velocity_x = FixedTrait::new_unscaled(100, false);
         let velocity_y = FixedTrait::new_unscaled(100, true);
         let angle = FixedTrait::new_unscaled(45, true);
-        let fuel = FixedTrait::new_unscaled(100, false);
+        let fuel = FixedTrait::new_unscaled(10000, false);
         
         set !(
             ctx.world,

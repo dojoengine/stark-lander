@@ -55,7 +55,7 @@ function Body() {
 		const angle_sign = angle >= 0 ? "0" : "1";
 
 		setupNetwork()
-			.execute("burn", ["0", "10", angle_mag, angle_sign, "1"])
+			.execute("burn", ["0", "1", angle_mag, angle_sign, "1"])
 			.then((result) => console.log("execute ", result))
 			.catch((error) => {
 				console.log(error);

@@ -60,15 +60,13 @@ mod tests {
         
         assert(*lander[0] == STARTING_BLOCKTIME.into(), 'x is wrong');
         assert(*lander[1] == position_x.mag.into(), 'x is wrong');
-        // assert(*lander[2] == position_x.sign.unwrap().try_into(), 'x sign is wrong');
-        // assert(*lander[3] == 12000, 'y is wrong');
 
         // shift time forward
         testing::set_block_timestamp(STARTING_BLOCKTIME + 10);
 
         let mut burn_call_data: Array = ArrayTrait::<felt252>::new();
         burn_call_data.append(game_id.into());
-        burn_call_data.append(10.into());
+        burn_call_data.append(1.into());
         burn_call_data.append(0.into());
         burn_call_data.append(1.into());
         burn_call_data.append(5.into());
@@ -81,12 +79,6 @@ mod tests {
         position_call_data.append(game_id.into());
 
         testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
-
-        // world.execute('position'.into(), position_call_data.span());
-
-        // testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
-
-        // world.execute('position'.into(), position_call_data.span());
 
     }
 }

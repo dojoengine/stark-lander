@@ -93,11 +93,10 @@ impl ImplLanderMath of ILanderMath {
 
         // Update fuel -----------------------------
 
-        let fuel_consumption = FixedTrait::new(FUEL_CONSUMPTION_RATE, false);
+        let fuel_consumption = FixedTrait::new_unscaled(FUEL_CONSUMPTION_RATE, false);
 
-        let fuel_consumed = fuel_consumption * delta_time;
-        self.fuel -= fuel_consumed;
-        // self.angle = FixedTrait::from_unscaled_felt(angle_deg_felt);
+        self.fuel -= fuel_consumption * delta_time;
+        
         self.angle = angle_deg;
 
         self
@@ -169,6 +168,9 @@ impl ImplLanderMath of ILanderMath {
 
         (self.angle.mag / ONE_u128).print();
         self.angle.sign.print();
+
+        (self.fuel.mag / ONE_u128).print();
+        self.fuel.sign.print();
     }
 }
 
@@ -180,18 +182,17 @@ fn test_update() {
     };
 
     let velocity = Vec2 {
-        x: FixedTrait::new_unscaled(100, false), y: FixedTrait::new_unscaled(100, true)
+        x: FixedTrait::new_unscaled(10, false), y: FixedTrait::new_unscaled(10, true)
     };
 
     let angle = FixedTrait::new_unscaled(45, true);
-    let fuel = FixedTrait::new_unscaled(100, false);
+    let fuel = FixedTrait::new_unscaled(10000, false);
 
     let mut lander = ImplLanderMath::new(position, velocity, angle, fuel);
 
     let thrust = FixedTrait::new_unscaled(10, false);
-    let delta_time_burn = FixedTrait::new_unscaled(5, false);
+    let delta_time_burn = FixedTrait::new_unscaled(20, false);
 
-    // lander.burn(10, -45, 5);
     lander.burn(thrust, angle, delta_time_burn);
     lander.print_unscaled();
 
