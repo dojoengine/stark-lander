@@ -26,5 +26,5 @@ export function parseRawCalldataAsLander(calldata: string[]): Lander {
 
 function parseMagAndSign(magValue: string, signValue: string) {
 	const sign = BigInt(signValue) === BigInt(0) ? "" : "-";
-	return math.fromFixed(`${sign}${BigInt(magValue) / BigInt(100) }`).toFixed(2);
+	return math.fromFixed(`${sign}${magValue}`).toFixed(2);
 }
