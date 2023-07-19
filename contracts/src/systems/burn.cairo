@@ -27,10 +27,12 @@ mod burn {
         let player_sk: Query = (game_id, player_id).into();
 
         // TODO: check auth
-        // TODO: check fuel
 
         // get current state
         let mut lander: Lander = get !(ctx.world, player_sk, Lander);
+
+        // assert fuel
+        assert(lander.fuel > 0, 'no fuel');
 
         let elapsed = info.block_timestamp - lander.last_update;
 
@@ -44,12 +46,11 @@ mod burn {
         let delta_time = FixedTrait::new_unscaled(delta_time_felt, false);
 
         // burn!!
-        new_position.burn(thrust, angle, delta_time);
-
-        // new_position.position_x.print();
+        let new = new_position.burn(thrust, angle, delta_time);
 
         // save new state of Lander
-        set !(ctx.world, player_sk, (lander));
+        // TOOD!
+        set !(ctx.world, player_sk, (new));
 
         return ();
     }

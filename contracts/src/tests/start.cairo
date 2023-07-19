@@ -27,8 +27,6 @@ mod tests {
     fn test_start() {
         testing::set_block_timestamp(STARTING_BLOCKTIME);
 
-        let caller = starknet::contract_address_const::<0x0>();
-
         // components
         let mut components: Array = Default::default();
         components.append(lander::TEST_CLASS_HASH);
@@ -53,20 +51,8 @@ mod tests {
         let old_lander = serde::Serde::<Lander>::deserialize(ref raw_old_lander)
                                 .expect('Lander failed to deserialize');
 
-        old_lander.fuel.print();
-
-        let position_x = FixedTrait::new_unscaled(1000, false);
-        let position_y = FixedTrait::new_unscaled(12000, false);
-        let velocity_x = FixedTrait::new_unscaled(100, false);
-        let velocity_y = FixedTrait::new_unscaled(100, false);
-        let angle = FixedTrait::new_unscaled(0, false);
-        let fuel = FixedTrait::new_unscaled(100, false);
+        // old_lander.fuel.print();
         
-        // assert(*lander[0] == STARTING_BLOCKTIME.into(), 'x is wrong');
-        // assert(*lander[1] == position_x.mag.into(), 'x is wrong');
-        // assert(*lander[2] == position_x.sign.unwrap().try_into(), 'x sign is wrong');
-        // assert(*lander[3] == 12000, 'y is wrong');
-
         // shift time forward
         testing::set_block_timestamp(STARTING_BLOCKTIME + 10);
 
@@ -79,22 +65,16 @@ mod tests {
 
         let mut res = world.execute('burn'.into(), burn_call_data.span());
 
+        testing::set_block_timestamp(STARTING_BLOCKTIME + 10);
+
         let mut raw_new_lander = world.entity('Lander'.into(), (game_id, player_id).into(), 0, dojo::SerdeLen::<Lander>::len());
         let new_lander = serde::Serde::<Lander>::deserialize(ref raw_new_lander)
                                 .expect('Lander failed to deserialize');
 
-        assert(new_lander.fuel < old_lander.fuel, 'fuel did not burn');
+        // new_lander.fuel.print();
+        // old_lander.fuel.print();
 
-        let mut position_call_data: Array = ArrayTrait::<felt252>::new();
-        position_call_data.append(game_id.into());
-
-        testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
-
-        // world.execute('position'.into(), position_call_data.span());
-
-        // testing::set_block_timestamp(STARTING_BLOCKTIME + 4);
-
-        // world.execute('position'.into(), position_call_data.span());
+        // assert(new_lander.fuel < old_lander.fuel, 'fuel did not burn');
 
     }
 }

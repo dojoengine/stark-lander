@@ -9,13 +9,7 @@ const GRAVITY: u128 = 10; // Gravity force
 const THRUST_FORCE: u128 = 1; // Thrust force applied on each update
 const LANDER_WIDTH: u32 = 100; // Width of the lander
 const LANDER_HEIGHT: u32 = 100; // Height of the lander
-const LANDING_PAD_WIDTH: u32 = 1000; // Width of the landing pad
-const LANDING_PAD_HEIGHT: u32 = 100; // Height of the landing pad
-const MAX_VELOCITY_X: u32 = 50; // Maximum horizontal velocity
-const MAX_VELOCITY_Y: u32 = 100; // Maximum vertical velocity
-const MAX_ANGLE: u32 = 0; // Maximum rotation angle
-const INITIAL_FUEL: u128 = 100; // Initial fuel amount
-const FUEL_CONSUMPTION_RATE: u128 = 10; // Fuel consumption rate per second
+const FUEL_CONSUMPTION_RATE: u128 = 1; // Fuel consumption rate per second
 
 #[derive(Copy, Drop)]
 struct LanderMath {
@@ -43,9 +37,6 @@ trait ILanderMath {
 
     // returns the lander's position at the given time
     fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath;
-
-    // wins if the lander is on the landing pad with a low enough velocity and angle
-    fn check_landed(ref self: LanderMath) -> bool;
 
     fn print(ref self: LanderMath);
     fn print_unscaled(ref self: LanderMath);
@@ -92,16 +83,22 @@ impl ImplLanderMath of ILanderMath {
         let fuel_consumption = FixedTrait::new_unscaled(FUEL_CONSUMPTION_RATE, false);
 
         self.fuel -= fuel_consumption * delta_time;
+
+        // self.fuel.mag.print();
+        // self.fuel.sign.print();
+
+        // overflow fuel check
+        if(self.fuel.sign == true) {
+            self.fuel = FixedTrait::new(0, false);
+        }
         
         self.angle = angle_deg;
 
         self
     }
     fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath {
-        // let delta_time = FixedTrait::new(delta_time_felt, false);
 
         // Update gravity -----------------------------
-
         let gravity_force = gravity(GRAVITY);
 
         // Update force -----------------------------
@@ -123,15 +120,6 @@ impl ImplLanderMath of ILanderMath {
         self.position = self.position + delta_position;
 
         self
-    }
-    fn check_landed(ref self: LanderMath) -> bool {
-        // check if the lander is on the landing pad with a low enough velocity and angle
-
-        // check y velocity is within range
-        // check x velocity is within range
-        // check x position is within range
-        // check y position is negative
-        true
     }
     fn print(ref self: LanderMath) {
         self.position.x.mag.print();
@@ -178,7 +166,7 @@ fn test_update() {
     };
 
     let velocity = Vec2 {
-        x: FixedTrait::new_unscaled(10, false), y: FixedTrait::new_unscaled(10, true)
+        x: FixedTrait::new_unscaled(0, false), y: FixedTrait::new_unscaled(10, true)
     };
 
     let angle = FixedTrait::new_unscaled(45, true);
@@ -189,9 +177,14 @@ fn test_update() {
     let thrust = FixedTrait::new_unscaled(10, false);
     let delta_time_burn = FixedTrait::new_unscaled(20, false);
 
+    let angle = FixedTrait::new_unscaled(45, true);
+
     lander.burn(thrust, angle, delta_time_burn);
+    let delta_time_position = FixedTrait::new_unscaled(10, false);
+    lander.position(delta_time_position);
     lander.print_unscaled();
 
+    lander.burn(thrust, angle, delta_time_burn);
     let delta_time_position = FixedTrait::new_unscaled(10, false);
     lander.position(delta_time_position);
     lander.print_unscaled();

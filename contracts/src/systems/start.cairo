@@ -25,11 +25,10 @@ mod start {
 
         // TODO: make rando
         let position_x = FixedTrait::new_unscaled(1000, false);
-        let position_y = FixedTrait::new_unscaled(12000, false);
-        let velocity_x = FixedTrait::new_unscaled(100, false);
-        let velocity_y = FixedTrait::new_unscaled(100, true);
-        let angle = FixedTrait::new_unscaled(45, true);
-        let fuel = FixedTrait::new_unscaled(10000, false);
+        let position_y = FixedTrait::new_unscaled(120000, false);
+        let velocity_x = FixedTrait::new_unscaled(1, false);
+        let velocity_y = FixedTrait::new_unscaled(1, true);
+        let angle = FixedTrait::new_unscaled(90, true);
         
         set !(
             ctx.world,
@@ -46,8 +45,7 @@ mod start {
                 velocity_y_sign: velocity_y.sign,
                 angle: angle.mag,
                 angle_sign: angle.sign,
-                fuel: fuel.mag,
-                fuel_sign: fuel.sign,
+                fuel: 10000
             })
         );
         return (game_id, player_id);
