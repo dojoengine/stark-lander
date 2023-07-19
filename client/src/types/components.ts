@@ -28,3 +28,4 @@ function parseMagAndSign(magValue: string, signValue: string) {
 	const sign = BigInt(signValue) === BigInt(0) ? "" : "-";
 	return math.fromFixed(`${sign}${magValue}`).toFixed(2);
 }
+``

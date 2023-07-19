@@ -28,10 +28,11 @@ An onchain interpretation of the classic game [Lunar Lander](https://en.wikipedi
 - `Start`: Spawns a Lander with some random coordinates
 - `Burn`: Adjusts the trajectory of the Lander according to inputs
 - `Position`: Returns live position of the Lander
+- `Win`: Create Win condition
 
 ### Components
 - `Lander`: Lander state and computed values
-- `Fuel` : TODO
+- `Fuel` : TODO: abstract from Lander component
 
 ### Game loop
 1. Players spawn a lander with `start`
@@ -55,4 +56,26 @@ curl -L https://install.dojoengine.org | bash
 dojoup
 ```
 
+#### Start Katana
+
+`katana --allow-zero-max-fee --block-time 1`
+
+#### Build World
+
+`sozo build`
+
+#### Migrate World
+
+`sozo migrate`
+
+---
+### Client
+
+```console
+cd client
+
+yarn
+
+yarn dev
+```
 
