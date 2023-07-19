@@ -19,9 +19,10 @@
 [tg-badge]: https://img.shields.io/endpoint?color=neon&logo=telegram&label=chat&style=flat-square&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fdojoengine
 [tg-url]: https://t.me/dojoengine
 
-## Lunar Lander onchain
+## Stark Lander
 
 An onchain interpretation of the classic game [Lunar Lander](https://en.wikipedia.org/wiki/Lunar_Lander_(video_game_genre)). Try and land on the ground with a velocity of 0.1m/s. All computation is calculated in [Cairo](https://book.cairo-lang.org/title-page.html) and the game is built using the Dojo engine.
+
 
 ### Systems
 - `Start`: Spawns a Lander with some random coordinates
@@ -37,3 +38,21 @@ An onchain interpretation of the classic game [Lunar Lander](https://en.wikipedi
 2. Input thrust and angle on each action
 3. Compute position according to block and tick forward at constant rate
 4. Determine if lander arrives at surface of planet at the correct angle and correct speed
+
+## Contract
+
+### Clone
+
+```console
+git clone https://github.com/dojoengine/stark-lander.git
+```
+
+### Install Dojo
+
+```console
+curl -L https://install.dojoengine.org | bash
+
+dojoup
+```
+
+
