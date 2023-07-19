@@ -71,10 +71,10 @@ mod tests {
         let new_lander = serde::Serde::<Lander>::deserialize(ref raw_new_lander)
                                 .expect('Lander failed to deserialize');
 
-        // new_lander.fuel.print();
-        // old_lander.fuel.print();
+        new_lander.fuel.print();
+        old_lander.fuel.print();
 
-        // assert(new_lander.fuel < old_lander.fuel, 'fuel did not burn');
+        assert(new_lander.fuel < old_lander.fuel, 'fuel did not burn');
 
     }
 }
