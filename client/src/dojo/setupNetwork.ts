@@ -62,7 +62,6 @@ async function execute(
 			maxFee: 0,
 		}
 	);
-	// console.log("call", call)
 	return call;
 }
 

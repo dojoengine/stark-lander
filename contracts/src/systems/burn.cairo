@@ -51,8 +51,24 @@ mod burn {
         new.fuel.print();
 
         // save new state of Lander
-        // TOOD!
-        set !(ctx.world, player_sk, (new));
+        set !(
+            ctx.world,
+            player_sk,
+            (Lander {
+                last_update: new.last_update,
+                position_x: new.position_x,
+                position_x_sign: new.position_x_sign,
+                position_y: new.position_y,
+                position_y_sign: new.position_y_sign,
+                velocity_x: new.velocity_x,
+                velocity_x_sign: new.velocity_x_sign,
+                velocity_y: new.velocity_y,
+                velocity_y_sign: new.velocity_y_sign,
+                angle: new.angle,
+                angle_sign: new.angle_sign,
+                fuel: new.fuel
+            })
+        );
 
         return ();
     }

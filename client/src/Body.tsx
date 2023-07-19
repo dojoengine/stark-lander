@@ -39,7 +39,6 @@ function Body() {
 			{
 				fuel: 100,
 				height: 120000,
-				pitch: 0,
 				angle: 45,
 				speed: 100,
 				time: "00:00",
@@ -161,11 +160,10 @@ function Body() {
 			onFetchLanderPosition((lander) => {
 				onAddRow({
 					time: e.data as string,
-					speed: Math.abs(lander.velocity_y),
-					angle: lander.angle,
+					speed: Math.abs(parseInt(lander.velocity_y)),
+					angle: parseInt(lander.angle) ,
 					fuel: lander.fuel,
-					height: lander.position_y,
-					pitch: 0,
+					height: parseInt(lander.position_y),
 				});
 			});
 		};

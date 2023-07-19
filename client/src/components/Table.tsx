@@ -21,9 +21,6 @@ function Title() {
 				<div>Speed</div> <div>(mph)</div>
 			</Box>
 			<Box className="flex gap-2 w-[115px]">
-				<div>Pitch</div> <div>(deg)</div>
-			</Box>
-			<Box className="flex gap-2 w-[115px]">
 				<div>Roll</div> <div>(deg)</div>
 			</Box>
 			<Box className="flex gap-2 w-[115px]">
@@ -35,7 +32,7 @@ function Title() {
 
 type RowProps = RowData;
 
-function Row({ time, height, speed, pitch, angle, fuel }: RowProps) {
+function Row({ time, height, speed, angle, fuel }: RowProps) {
 	return (
 		<HStack
 			color="neon.400"
@@ -48,7 +45,6 @@ function Row({ time, height, speed, pitch, angle, fuel }: RowProps) {
 			<Box className="flex gap-2 w-[115px]">{time}</Box>
 			<Box className="flex gap-2 w-[115px]">{height}</Box>
 			<Box className="flex gap-2 w-[115px]">{speed}</Box>
-			<Box className="flex gap-2 w-[115px] relative">{pitch}</Box>
 			<Box className="flex gap-2 w-[115px]">{angle}</Box>
 			<Box className="flex gap-2 w-[115px]">{fuel}</Box>
 		</HStack>
@@ -62,7 +58,6 @@ export type RowData = RowDataWithoutTime & {
 export interface RowDataWithoutTime {
 	height: number;
 	speed: number;
-	pitch: number;
 	angle: number;
 	fuel: number;
 }
@@ -103,7 +98,6 @@ function Table({ rows }: Props) {
 						time={row.time}
 						height={row.height}
 						speed={row.speed}
-						pitch={row.pitch}
 						angle={row.angle}
 						fuel={row.fuel}
 					/>

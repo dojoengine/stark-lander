@@ -9,7 +9,7 @@ const GRAVITY: u128 = 10; // Gravity force
 const THRUST_FORCE: u128 = 1; // Thrust force applied on each update
 const LANDER_WIDTH: u32 = 100; // Width of the lander
 const LANDER_HEIGHT: u32 = 100; // Height of the lander
-const FUEL_CONSUMPTION_RATE: u128 = 1; // Fuel consumption rate per second
+const FUEL_CONSUMPTION_RATE: u128 = 10; // Fuel consumption rate per second
 
 #[derive(Copy, Drop)]
 struct LanderMath {
