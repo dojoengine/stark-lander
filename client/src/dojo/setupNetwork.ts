@@ -38,11 +38,13 @@ export function setupNetwork() {
 		signer,
 		execute: async (system: string, call_data: num.BigNumberish[]) =>
 			execute(signer, system, call_data),
-		call: async (call_data: any[]) => call(provider, call_data),
+		call_execute: async (call_data: any[]) => call_execute(provider, call_data),
+		call: async (selector: string, call_data: any[]) =>
+			call(provider, selector, call_data),
 	};
 }
 
-export async function execute(
+async function execute(
 	account: Account,
 	system: string,
 	call_data: num.BigNumberish[]
@@ -64,8 +66,12 @@ export async function execute(
 	return call;
 }
 
-export function call(provider: RpcProvider, call_data: any[]) {
+function call_execute(provider: RpcProvider, call_data: any[]) {
 	return new Contract(abi, WORLD_ADDRESS, provider).call("execute", call_data);
+}
+
+function call(provider: RpcProvider, selector: string, call_data: any[]) {
+	return new Contract(abi, WORLD_ADDRESS, provider).call(selector, call_data);
 }
 
 export function strTofelt252Felt(str: string): string {

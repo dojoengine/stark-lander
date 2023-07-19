@@ -20,7 +20,7 @@ function Slider({ angle = 0, onChangeAngle }: Props) {
 	const onDown = (angle: number) => onChangeAngle(angle - 1);
 
 	return (
-		<HStack className="py-3 justify-between my-4">
+		<HStack className="py-3 justify-between my-4" w="full">
 			<Text width="120px">Angle:</Text>
 			<Card
 				variant={"pixelated"}
