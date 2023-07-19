@@ -61,7 +61,9 @@ dojoup
 ### Katana
 Run Katana in a terminal window using the following command:
 
-`katana --allow-zero-max-fee --block-time 1`
+```console
+katana --allow-zero-max-fee --block-time 1`
+```
 
 ### Contract
 Switch to a new terminal window and run the following commands:
