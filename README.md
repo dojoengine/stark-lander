@@ -40,7 +40,7 @@ An onchain interpretation of the classic game [Lunar Lander](https://en.wikipedi
 3. Compute position according to block and tick forward at constant rate
 4. Determine if lander arrives at surface of planet at the correct angle and correct speed
 
-## Contract
+## Pre-requisites
 
 ### Clone
 
@@ -56,14 +56,14 @@ curl -L https://install.dojoengine.org | bash
 dojoup
 ```
 
-### Running the game
+## Running the game
 
-#### Katana
+### Katana
 Run Katana in a terminal window using the following command:
 
 `katana --allow-zero-max-fee --block-time 1`
 
-#### Contract
+### Contract
 Switch to a new terminal window and run the following commands:
 
 ```console
@@ -74,7 +74,7 @@ sozo build // Build World
 sozo migrate // Migrate World
 ```
 
-#### Client
+### Client
 In another terminal window, start the client server by running the following command:
 
 ```console
