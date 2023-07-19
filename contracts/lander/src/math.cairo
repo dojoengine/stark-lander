@@ -58,12 +58,8 @@ impl ImplLanderMath of ILanderMath {
     fn burn(
         ref self: LanderMath, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed
     ) -> LanderMath {
-        // let thrust = FixedTrait::new(thrust_felt, false);
 
         let angle = deg_to_rad(angle_deg);
-        // let angle = FixedTrait::new(angle_deg_felt, angle_deg_sign);
-
-        // let delta_time = FixedTrait::new(delta_time_felt, false);
 
         // Update gravity -----------------------------
 
