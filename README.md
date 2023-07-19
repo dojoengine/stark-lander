@@ -56,20 +56,26 @@ curl -L https://install.dojoengine.org | bash
 dojoup
 ```
 
-#### Start Katana
+### Running the game
+
+#### Katana
+Run Katana in a terminal window using the following command:
 
 `katana --allow-zero-max-fee --block-time 1`
 
-#### Build World
+#### Contract
+Switch to a new terminal window and run the following commands:
 
-`sozo build`
+```console
+cd contract
 
-#### Migrate World
+sozo build // Build World
 
-`sozo migrate`
+sozo migrate // Migrate World
+```
 
----
-### Client
+#### Client
+In another terminal window, start the client server by running the following command:
 
 ```console
 cd client
