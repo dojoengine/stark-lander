@@ -26,9 +26,11 @@ An onchain interpretation of the classic game [Lunar Lander](https://en.wikipedi
 ### Systems
 - `Start`: Spawns a Lander with some random coordinates
 - `Burn`: Adjusts the trajectory of the Lander according to inputs
+- `Position`: Returns live position of the Lander
 
-### Positions
+### Components
 - `Lander`: Lander state and computed values
+- `Fuel` : TODO
 
 ### Game loop
 1. Players spawn a lander with `start`
