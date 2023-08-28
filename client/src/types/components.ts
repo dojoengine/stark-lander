@@ -14,13 +14,13 @@ export function parseRawCalldataAsLander(calldata: string[]): Lander {
 
 	console.log(calldata[11])
 	return {
-		last_update: BigInt(calldata[0]).toString(),
-		position_x: parseMagAndSign(calldata[1], calldata[2]),
-		position_y: parseMagAndSign(calldata[3], calldata[4]),
-		velocity_x: parseMagAndSign(calldata[5], calldata[6]),
-		velocity_y: parseMagAndSign(calldata[7], calldata[8]),
-		angle: parseMagAndSign(calldata[9], calldata[10]),
-		fuel: parseInt(calldata[11]) ,
+		last_update: BigInt(calldata[1]).toString(),
+		position_x: parseMagAndSign(calldata[2], calldata[3]),
+		position_y: parseMagAndSign(calldata[4], calldata[5]),
+		velocity_x: parseMagAndSign(calldata[6], calldata[7]),
+		velocity_y: parseMagAndSign(calldata[8], calldata[9]),
+		angle: parseMagAndSign(calldata[10], calldata[11]),
+		fuel: parseInt(calldata[12]) ,
 	};
 }
 
