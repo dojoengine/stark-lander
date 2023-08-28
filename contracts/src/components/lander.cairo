@@ -3,13 +3,17 @@ use lander_math::math::{ImplLanderMath, ILanderMath, LanderMath};
 use box::BoxTrait;
 use option::OptionTrait;
 use traits::{Into, TryInto};
-use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128};
-use cubit::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
-use cubit::math::trig::{cos, sin, PI_u128};
+use cubit::f128::types::fixed::{
+    Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128
+};
+use cubit::f128::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
+use cubit::f128::math::trig::{cos, sin, PI_u128};
 
 // TODO: Make multiple components for the lander
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct Lander {
+    #[key]
+    key: felt252,
     last_update: u64,
     position_x: u128,
     position_x_sign: bool,
@@ -24,20 +28,7 @@ struct Lander {
     fuel: u128
 }
 
-trait LanderTrait {
-    // computed position
-    fn position(ref self: Lander, elapsed: u64) -> Lander;
-
-    // burn adjustment
-    fn burn(ref self: Lander, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed) -> Lander;
-
-    // check within range
-    fn has_landed(self: @Lander, elapsed: u64) -> bool;
-
-    // convert to math struct
-    fn to_math(self: @Lander) -> LanderMath;
-}
-
+#[generate_trait]
 impl ImplLander of LanderTrait {
     fn burn(ref self: Lander, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed) -> Lander {
         let info = starknet::get_block_info().unbox();
@@ -47,6 +38,7 @@ impl ImplLander of LanderTrait {
         landerMath.burn(thrust, angle_deg, delta_time);
 
         Lander {
+            key: self.key,
             last_update: info.block_timestamp,
             position_x: landerMath.position.x.mag,
             position_x_sign: landerMath.position.x.sign,
@@ -68,6 +60,7 @@ impl ImplLander of LanderTrait {
         landerMath.position(FixedTrait::new_unscaled(elapsed.into(), false));
 
         Lander {
+            key: self.key,
             last_update: self.last_update,
             position_x: landerMath.position.x.mag,
             position_x_sign: landerMath.position.x.sign,
@@ -126,6 +119,7 @@ fn check_landed() {
     let fuel = FixedTrait::new_unscaled(10000, false);
 
     let mut lander = Lander {
+        key: 0x1,
         last_update: 1000,
         position_x: position_x.mag,
         position_x_sign: position_x.sign,
@@ -159,6 +153,7 @@ fn check_burn() {
     let fuel = FixedTrait::new_unscaled(10000, false);
 
     let mut lander = Lander {
+        key: 0x1,
         last_update: 1000,
         position_x: position_x.mag,
         position_x_sign: position_x.sign,

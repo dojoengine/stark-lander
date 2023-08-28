@@ -93,8 +93,9 @@ function Table({ rows }: Props) {
 				<Divider />
 			</div>
 			<VStack align="normal" position="relative" className=" py-1 px-5">
-				{rows.map((row) => (
+				{rows.map((row, i) => (
 					<Row
+						key={i}
 						time={row.time}
 						height={row.height}
 						speed={row.speed}

@@ -7,7 +7,9 @@ mod burn {
 
     use dojo::world::Context;
 
-    use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128};
+    use cubit::f128::types::fixed::{
+        Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128
+    };
 
     use stark_lander::components::lander::{Lander, LanderTrait};
     use stark_lander::components::fuel::Fuel;
@@ -24,12 +26,12 @@ mod burn {
 
         let player_id: felt252 = ctx.origin.into();
 
-        let player_sk: Query = (game_id, player_id).into();
+        let key = player_id + game_id.into();
 
         // TODO: check auth
 
         // get current state
-        let mut lander: Lander = get !(ctx.world, player_sk, Lander);
+        let mut lander: Lander = get!(ctx.world, key, Lander);
 
         // assert fuel
         assert(lander.fuel > 0, 'no fuel');
@@ -51,10 +53,10 @@ mod burn {
         new.fuel.print();
 
         // save new state of Lander
-        set !(
+        set!(
             ctx.world,
-            player_sk,
             (Lander {
+                key,
                 last_update: new.last_update,
                 position_x: new.position_x,
                 position_x_sign: new.position_x_sign,

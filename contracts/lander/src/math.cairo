@@ -1,7 +1,9 @@
 use debug::PrintTrait;
-use cubit::types::fixed::{Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128};
-use cubit::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
-use cubit::math::trig::{cos, sin, PI_u128};
+use cubit::f128::types::fixed::{
+    Fixed, FixedTrait, FixedAdd, FixedSub, FixedMul, FixedDiv, ONE_u128
+};
+use cubit::f128::types::vec2::{Vec2, Vec2Trait, Vec2Add, Vec2Sub, Vec2Mul, Vec2Div};
+use cubit::f128::math::trig::{cos, sin, PI_u128};
 use traits::{TryInto, Into};
 
 // Constants
@@ -29,27 +31,16 @@ fn gravity(gravity: u128) -> Vec2 {
     Vec2Trait::new(FixedTrait::new(0, false), FixedTrait::new_unscaled(gravity, true))
 }
 
-trait ILanderMath {
-    fn new(position: Vec2, velocity: Vec2, angle: Fixed, fuel: Fixed) -> LanderMath;
-
-    // adjusts the lander's position, velocity, and fuel based on the thrust and angle
-    fn burn(ref self: LanderMath, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed) -> LanderMath;
-
-    // returns the lander's position at the given time
-    fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath;
-
-    fn print(ref self: LanderMath);
-    fn print_unscaled(ref self: LanderMath);
-}
-
+#[generate_trait]
 impl ImplLanderMath of ILanderMath {
     fn new(position: Vec2, velocity: Vec2, angle: Fixed, fuel: Fixed) -> LanderMath {
         LanderMath { position, velocity, angle, fuel }
     }
+
+    // adjusts the lander's position, velocity, and fuel based on the thrust and angle
     fn burn(
         ref self: LanderMath, thrust: Fixed, angle_deg: Fixed, delta_time: Fixed
     ) -> LanderMath {
-
         let angle = deg_to_rad(angle_deg);
 
         // Update gravity -----------------------------
@@ -88,16 +79,17 @@ impl ImplLanderMath of ILanderMath {
         // self.fuel.sign.print();
 
         // overflow fuel check
-        if(self.fuel.sign == true) {
+        if (self.fuel.sign == true) {
             self.fuel = FixedTrait::new(0, false);
         }
-        
+
         self.angle = angle_deg;
 
         self
     }
-    fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath {
 
+    // returns the lander's position at the given time
+    fn position(ref self: LanderMath, delta_time: Fixed) -> LanderMath {
         // Update gravity -----------------------------
         let gravity_force = gravity(GRAVITY);
 
