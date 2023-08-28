@@ -3,4 +3,4 @@ name = "lander_math"
 version = "0.1.0"
 
 [dependencies]
-cubit = { git = "https://github.com/influenceth/cubit" }
+cubit = { git = "https://github.com/influenceth/cubit", rev = "f888156" }

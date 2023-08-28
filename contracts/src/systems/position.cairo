@@ -18,16 +18,17 @@ mod position {
         let player_id: felt252 = player_id.into();
 
         // define query
-        let player_sk: Query = (game_id, player_id).into();
+        let game_id = ctx.world.uuid();
+        let key = player_id + game_id.into();
 
         // get current state
-        let mut lander: Lander = get!(ctx.world, player_sk, Lander);
+        let mut lander: Lander = get!(ctx.world, key, Lander);
 
         // get elapsed between last update
         let elapsed = info.block_timestamp - lander.last_update;
 
         // compute position according to time
-        let mut new_position = lander.position(elapsed);    
+        let mut new_position = lander.position(elapsed);
 
         new_position
     }
