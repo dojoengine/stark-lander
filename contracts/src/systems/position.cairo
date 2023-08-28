@@ -18,7 +18,6 @@ mod position {
         let player_id: felt252 = player_id.into();
 
         // define query
-        let game_id = ctx.world.uuid();
         let key = player_id + game_id.into();
 
         // get current state
