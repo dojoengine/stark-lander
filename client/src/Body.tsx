@@ -72,7 +72,7 @@ function Body() {
 			.call_execute(["8101821151424638830", [gameId, KATANA_ACCOUNT_1_ADDRESS]])
 			.then((result) => {
 				const data = result as string[];
-				console.log("raw", data);
+				console.log("raw", parseRawCalldataAsLander(data));
 				callback(parseRawCalldataAsLander(data));
 			})
 			.catch((error) => {
